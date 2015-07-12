@@ -12,6 +12,6 @@ setup(
             'charlesbot = charlesbot.__main__:main'
             ]
     },
-    install_requires=open('requirements.txt').readlines(),
+    install_requires=[],
     test_suite='nose.collector'
 )

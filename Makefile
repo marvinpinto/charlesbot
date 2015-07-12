@@ -27,6 +27,10 @@ install: env
 	$(ENV)/bin/pip install -r requirements-dev.txt
 	$(ENV)/bin/pip install -e .
 
+freeze: clean-all env
+	$(ENV)/bin/pip install -e .
+	$(ENV)/bin/pip freeze | sed '/^-e.*/d' > requirements.txt
+
 checkstyle: install
 	$(ENV)/bin/flake8 --max-complexity 10 charlesbot
 	$(ENV)/bin/flake8 --max-complexity 10 tests
