@@ -36,7 +36,12 @@ checkstyle: install
 	$(ENV)/bin/flake8 --max-complexity 10 tests
 
 test: install
-	$(ENV)/bin/nosetests tests
+	$(ENV)/bin/nosetests \
+		-v \
+		--with-coverage \
+		--cover-package=charlesbot \
+		--cover-inclusive \
+		tests
 
 run:
 	$(ENV)/bin/charlesbot
