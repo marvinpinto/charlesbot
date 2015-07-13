@@ -1,2 +1,3 @@
 [main]
 logging_config = logging.ini
+slackbot_token = xoxb-...
