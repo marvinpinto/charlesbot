@@ -5,39 +5,32 @@ from charlesbot.util.parser import capture_sys_output
 
 class TestParser(unittest.TestCase):
 
+    def setUp(self):
+        self.regex_1 = "CharlesBOT is a Slack RTM robot!"
+        self.regex_2 = \
+            "See https://github.com/marvinpinto/charlesbot for details"
+
     def test_empty_config(self):
+        parse_args([])
+        self.assertEqual("", "")
+
+    def test_config_help_1(self):
         with self.assertRaises(SystemExit) as cm:
             with capture_sys_output() as (stdout, stderr):
-                parse_args([])
-        self.assertEqual(cm.exception.code, 2)
+                parse_args(['-h'])
+        output = stdout.getvalue().strip().replace('\n', ' ')
+        self.assertEqual(cm.exception.code, 0)
+        self.assertRegexpMatches(output, self.regex_1)
+        self.assertRegexpMatches(output, self.regex_2)
 
-    def test_config_supplied_1(self):
-        parsed_args = parse_args(['--config', 'hello'])
-        self.assertEqual(parsed_args.config, "hello")
-
-    def test_config_supplied_2(self):
-        parsed_args = parse_args(['-c', 'hello'])
-        self.assertEqual(parsed_args.config, "hello")
-
-    def test_config_blank_1(self):
-        parsed_args = parse_args(['--config', ''])
-        self.assertEqual(parsed_args.config, "")
-
-    def test_config_blank_2(self):
-        parsed_args = parse_args(['-c', ''])
-        self.assertEqual(parsed_args.config, "")
-
-    def test_config_invalid_1(self):
+    def test_config_help_2(self):
         with self.assertRaises(SystemExit) as cm:
             with capture_sys_output() as (stdout, stderr):
-                parse_args(['--config'])
-        self.assertEqual(cm.exception.code, 2)
-
-    def test_config_invalid_2(self):
-        with self.assertRaises(SystemExit) as cm:
-            with capture_sys_output() as (stdout, stderr):
-                parse_args(['-c'])
-        self.assertEqual(cm.exception.code, 2)
+                parse_args(['--help'])
+        output = stdout.getvalue().strip().replace('\n', ' ')
+        self.assertEqual(cm.exception.code, 0)
+        self.assertRegexpMatches(output, self.regex_1)
+        self.assertRegexpMatches(output, self.regex_2)
 
     def test_bogus_args(self):
         with self.assertRaises(SystemExit) as cm:

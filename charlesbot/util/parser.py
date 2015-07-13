@@ -5,17 +5,10 @@ from io import StringIO
 
 
 def parse_args(args):
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "-c",
-        "--config",
-        help="config file",
-        action="store",
-        dest="config",
-        required=True
+    parser = argparse.ArgumentParser(
+        description="CharlesBOT is a Slack RTM robot!",
+        epilog="See https://github.com/marvinpinto/charlesbot for details"
     )
-
     return parser.parse_args(args)
 
 
