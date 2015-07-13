@@ -1,0 +1,2 @@
+[main]
+logging_config = logging.ini

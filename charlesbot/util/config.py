@@ -11,4 +11,5 @@ def get_config_file_name():
 
 def read_config(config_file):
     config = ConfigParser(allow_no_value=False)
-    return config.read(config_file)
+    config.read(config_file)
+    return config
