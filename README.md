@@ -6,6 +6,8 @@ CharlesBOT is a Python bot written to take advantage of Slack's [Real Time
 Messaging][1] API. It is very much in development at the moment so bear with me
 and it'll get there eventually :)
 
+[![Build Status](https://travis-ci.org/marvinpinto/charlesbot.svg?branch=master)](https://travis-ci.org/marvinpinto/charlesbot)
+
 
 
 ## What does this thing even do?!

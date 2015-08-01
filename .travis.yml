@@ -1,0 +1,10 @@
+language: python
+sudo: false
+python:
+  - "3.4"
+
+install: make install
+
+script:
+  - make checkstyle
+  - make test
