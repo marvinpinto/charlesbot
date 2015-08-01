@@ -8,3 +8,13 @@ install: make install
 script:
   - make checkstyle
   - make test
+
+deploy:
+
+- provider: pypi
+  user: marvinpinto
+  password:
+    secure: etI6uS3Ercc5X4lHYMgoqzdecFBYuwibn7PmtmDFG9573A+r6QldIqfkn5PrDOJGm0Y0PNp7cxGutZ/+4KsyiH9zKr2p1M83Gpuloc8L1ZFxPSzlJQsLK1xaiMT8YbvR9ThLO+ua42Zx3AcFcGANpbeWqYdZ6ELEcWd/a0EkG7RFbhWg99ypaOVQCtap3Wfm88bv0Y586YbmB6r//f3HOvW3VX9ID5BQxVo7NCvqjKsygdqix0bq4wjLQoWohlw4W04ldN7Pba8+uAD+6G7sLit8J1FZQOe6n8t/qhndIBYU7v/jp3KJJMxuEWFfaJ5+gf+d+Ypx56v1e1po+bQ2bEDstjigNhVI4vzSwa4ksUQnr7BggtIO94BzrLNCpYvEJjsKoAjrYSrLbmtUYhW8y13YprW+bJiTFYJQpq1Ly9hZPCaDQ7yfs0kbsaax5XBc5MsT3VD6kq/EwCr3z0ZOidN3QJCts+bPZlH5cC7XnifOiIwySMu/C5DFmuqHffOZ+2vYfKutDUcX2PvbPnvv9P2yINfrAtBAsqeYf1r0jy3TeThASpClvdRstQQCpdrAxKR3L8l23wdjq+SES5O1RNp05K1XMe2oDgycG7epCTIKLYAeb9Ak0Trmkc34CXeEUClI9SXbGfHqdOsMLBgooj1bTTjDOXKtDfk+Y85kwis=
+  on:
+    tags: true
+    repo: marvinpinto/charlesbot
