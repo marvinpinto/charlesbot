@@ -2,4 +2,3 @@ env/
 charlesbot.egg-info/
 .coverage
 development.ini
-logging.ini

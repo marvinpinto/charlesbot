@@ -14,6 +14,7 @@ help:
 
 clean:
 	py3clean .
+	find . -name "__pycache__" -exec /bin/rm -rf {} \;
 
 clean-all: clean
 	rm -rf env
@@ -40,4 +41,4 @@ test: install
 		tests
 
 run:
-	$(ENV)/bin/charlesbot
+	PYTHONWARNINGS=default PYTHONASYNCIODEBUG=1 $(ENV)/bin/charlesbot

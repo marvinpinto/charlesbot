@@ -1,0 +1,23 @@
+{
+    "ok": true,
+    "channels": [
+        {
+            "id": "C024BE91A",
+            "name": "fun",
+            "is_general": false,
+            "is_member": true
+        },
+        {
+            "id": "C024BE91B",
+            "name": "fun",
+            "is_general": false,
+            "is_member": true
+        },
+        {
+            "id": "C024BE91C",
+            "name": "fun",
+            "is_general": false,
+            "is_member": true
+        }
+    ]
+}

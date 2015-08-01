@@ -1,0 +1,26 @@
+{
+    "ok": true,
+    "groups": [
+        {
+            "id": "G024BE91A",
+            "name": "secretplans1",
+            "created": 1360782804,
+            "creator": "U024BE7LH",
+            "is_archived": false
+        },
+        {
+            "id": "G024BE91B",
+            "name": "secretplans2",
+            "created": 1360782804,
+            "creator": "U024BE7LH",
+            "is_archived": false
+        },
+        {
+            "id": "G024BE91C",
+            "name": "secretplans3",
+            "created": 1360782804,
+            "creator": "U024BE7LH",
+            "is_archived": false
+        }
+    ]
+}
