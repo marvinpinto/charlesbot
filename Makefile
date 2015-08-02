@@ -14,6 +14,7 @@ help:
 
 clean:
 	py3clean .
+	rm -f .coverage
 	find . -name "__pycache__" -exec /bin/rm -rf {} \;
 
 clean-all: clean
@@ -36,7 +37,6 @@ test: install
 		-v \
 		--with-coverage \
 		--cover-package=charlesbot \
-		--cover-inclusive \
 		tests
 
 run:
