@@ -49,6 +49,7 @@ option for you to get going!
 #### Installing from PyPI
 
 ```bash
+export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.ini
 pyvenv-3.4 charlesbot-env
 charlesbot-env/bin/pip install git+https://github.com/slackhq/python-slackclient.git@ba71b24603f63e54e704d0481812efcd9f7b8c14
 charlesbot-env/bin/pip install charlesbot
