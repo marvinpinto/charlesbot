@@ -21,8 +21,7 @@ clean-all: clean
 	rm -rf charlesbot.egg-info
 
 env: clean
-	test -d $(ENV) || pyvenv-3.4 --without-pip $(ENV)
-	test -f $(ENV)/bin/pip || curl https://bootstrap.pypa.io/get-pip.py | $(ENV)/bin/python
+	test -d $(ENV) || pyvenv-3.4 $(ENV)
 
 install: env
 	$(ENV)/bin/pip install -r requirements-dev.txt

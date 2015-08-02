@@ -28,25 +28,53 @@ Send a `!wall` broadcast message to all channels Charles has been invited to!
 
 ## Cool! So how do I run this thing??
 
-This part is a bit hairy at the moment since it involves cloning this repo and
-running from source :(
+First off, create a `config.ini` file similar to [config.ini.example][8].
+You'll need a [Slack Bot Token][2], if you don't already have one.
 
-I plan on publishing this to PyPI and also creating a Docker container so you
-don't need to worry about the source unless you want to!  (That's what I hope)
+You have two options to run CharlesBOT:
 
-#### Things you'll need:
+1. Using PyPI
+1. Docker
+
+If you already have a [Docker][9] based infrastructure, that might be the easiest
+option for you to get going!
+
+
+### PyPI
+
+#### Prerequisites
 
 - Python 3.4.3 (and related tooling including `pyvenv`)
-- [Slack Bot Token][2]
 
-#### Running CharlesBOT locally:
-
-First create a localy `development.ini` file using the `config.ini.example`
-file as a reference.
+#### Installing from PyPI
 
 ```bash
-make install
-make run
+pyvenv-3.4 charlesbot-env
+charlesbot-env/bin/pip install git+https://github.com/slackhq/python-slackclient.git@ba71b24603f63e54e704d0481812efcd9f7b8c14
+charlesbot-env/bin/pip install charlesbot
+```
+
+The reason for installing `slackclient` straight from GitHub here is because
+the published (PyPI) version of `slackclient` does not contain the
+modifications necessary to work with Python 3.x. I'll get this updated as and
+when they publish a newer version of `slackclient`.
+
+#### Running CharlesBOT
+
+```bash
+export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.ini
+charlesbot-env/bin/charlesbot
+```
+
+### Docker
+
+```bash
+docker run \
+  --rm \
+  -it \
+  -e "CHARLESBOT_SETTINGS_FILE=/config.ini" \
+  -v /path/to/your/config.ini:/config.ini \
+  marvin/charlesbot
 ```
 
 
@@ -67,16 +95,22 @@ Now get to work!
 A few make targets that might be useful to you:
 - `make checkstyle`
 - `make test`
+- `make run`
 
 
 
 ## The Why's
 
 My original motivation behind this project was to get my hands dirty with
-Python 3 + asyncio and it's been a neat learning experience. This currently
-uses the [python-slackclient][7] library to handle the underlying websocket
-communication but I intend on replacing that with an asyncio native websocket
-solution eventually.
+Python 3 + asyncio and it's been a neat learning experience.
+
+#### `python-slackclient`
+
+This currently uses the [python-slackclient][7] library to handle the
+underlying websocket communication but I intend on replacing that with an
+asyncio native websocket solution eventually.
+
+#### Plugin system
 
 The "plugin" architecture was designed to be drop-in-place without having to
 touch the core system, but it isn't where I would like it to be and still needs
@@ -85,6 +119,22 @@ a bit of work. And that's okay!
 The "queue + worker" system of delivering messages to each plugin is an
 experiment in how much this design will scale before it starts hogging CPU
 resources and just being generally slow. Let's see how it goes!
+
+#### Configuration management
+
+One thing that I would like to axe eventually is the way configuration is
+read/written to. I am *not* a fan of supplying config files on the command
+line, and the other option of "everything gets configured through environment
+variables" is also a bit extreme. Relying on a user to supply a million
+environment variables can get quite ugly (imagine a chain of 50 + `-e
+"VAR1=foo"` docker arguments!).
+
+I am hoping to explore an architecture where the basic amount of information
+needed to get go is read from environment variables, and the rest is read from
+a key-value store of sorts (DynamoDB perhaps?). This would allow for things
+such as post-launch configuration and scales nicely if/when the robot is
+restarted as users would not need to go in and reconfigure their
+plugin-specific settings.
 
 
 
@@ -101,3 +151,5 @@ See the [LICENSE](LICENSE.txt) file for license rights and limitations (MIT).
 [5]: /images/help.png?raw=true
 [6]: http://i.giphy.com/5xtDarmwsuR9sDRObyU.gif
 [7]: https://github.com/slackhq/python-slackclient
+[8]: /config.ini.example
+[9]: https://www.docker.com
