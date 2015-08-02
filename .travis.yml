@@ -3,14 +3,18 @@ sudo: false
 python:
   - "3.4"
 
-install: make install
+install:
+  - make install
+  - ./env/bin/pip install coveralls
 
 script:
   - make checkstyle
   - make test
 
-deploy:
+after_success:
+  - ./env/bin/coveralls
 
+deploy:
 - provider: pypi
   user: marvinpinto
   password:
