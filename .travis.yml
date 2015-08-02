@@ -22,3 +22,8 @@ deploy:
   on:
     tags: true
     repo: marvinpinto/charlesbot
+
+notifications:
+  email: false
+  irc:
+    - secure: "Y5ZXefNfyouSSCyD+A6zi9LFJz/+L0NH7W9woUo4D2/Ee2KOPE7yIhe/WaYFeigxqFusWOntDIJA5qEyCGBCOldePbtKQuKlekWehkq1i5LLfeAu5FmRQU2wVzME957KyKzC8pARcExSqVaZWW5fvUI5VVCGbrp1iJhzzsPEMZ4SfYQpahdbIFTHPkM851FqMYPSUvDducIwE40aaoabwmS0pNPgZ0DMl1cUf5gGeWSYyWtO9Hj/iS9QgCKa2XRUhQ2Dy1sShBnu3Wloc+gQJU+k7a0yKI7aDp2qGUdi3L1MDTIZZ4CQ9KEyXD8Zj3nG/X6j69EO5s7ext/La9NFroZvf6updgAtZXi/Ug01nFqviQ7MvKN/YmCVs+9tMjzB8I9DKZpHbK9RYxpHa4dvDWmdzyPtirouLLgtLyUtYuvh8AFZAF02HYeka7AJ8uCoPAO0K5QfrR1eM9Ag7tKsy29MtQ2lvAuR3zh73jA8Aqiw1bbLypSxIovijufOyz+7VHyEIGvcnlZwllGiUacdsLFog4rBws8Fm8r54VjDJkwXmzO6DDSfmOG+N5EfMV+FO7+V+dn2Xuy97bHH6/Almqq5jEBaB8niw1njR6HLLbFl99vzQErLpKSWiBE7tQ/0AtZqSxBLqWgYSi9gG3bYHLZ9+o1ijwEMrwLt0NIUysM="
