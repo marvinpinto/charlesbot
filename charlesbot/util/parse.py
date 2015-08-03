@@ -30,3 +30,14 @@ def does_msg_contain_prefix(prefix, msg):
         return True
     else:
         return False
+
+
+def parse_channel_message(msg):
+    """
+    Helper function to return a parsed channel/group message
+    """
+    types = ['message']
+    fields = ['channel', 'user', 'text']
+    if not filter_message_types(msg, types, fields):
+        return None, None
+    return msg['channel'], msg['text']
