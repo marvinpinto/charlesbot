@@ -2,3 +2,8 @@
 omit =
     */python?.?/*
     */site-packages/nose/*
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    pass
+    rtm_send_message

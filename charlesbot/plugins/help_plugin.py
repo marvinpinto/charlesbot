@@ -1,23 +1,13 @@
 from charlesbot.util.parse import does_msg_contain_prefix
-from charlesbot.util.parse import filter_message_types
-import logging
+from charlesbot.util.parse import parse_channel_message
+from charlesbot.base_plugin import BasePlugin
 import asyncio
 
 
-class Help(object):
+class Help(BasePlugin):
 
     def __init__(self, slack_client):
-        self.is_running = True
-        self._plugin_name = "Help!"
-        self.log = logging.getLogger(__name__)
-        self.sc = slack_client
-        self.log.info("Initializing the Help! plugin")
-        loop = asyncio.get_event_loop()
-        self.q = asyncio.Queue()
-        loop.create_task(self.consume())
-
-    def get_plugin_name(self):
-        return self._plugin_name
+        super().__init__(slack_client, "Help!")
 
     def get_help_message(self):
         msg = [
@@ -33,23 +23,13 @@ class Help(object):
             yield from self.parse_help_message(msg)
 
     @asyncio.coroutine
-    def consume(self):
-        while self.is_running:
-            value = yield from self.q.get()
-            loop = asyncio.get_event_loop()
-            loop.create_task(self.process_message(value))
-
-    @asyncio.coroutine
     def parse_help_message(self, msg):
-        types = ['message']
-        fields = ['channel', 'user', 'text']
-        if not filter_message_types(msg, types, fields):
+        channel, msg, user = parse_channel_message(msg)
+        if not channel or not msg or not user:
             return
-        channel_id = msg['channel']
-        msg_text = msg['text']
-        parsed = does_msg_contain_prefix("!help", msg_text)
+        parsed = does_msg_contain_prefix("!help", msg)
         if parsed:
-            yield from self.send_help_message(channel_id)
+            yield from self.send_help_message(channel)
 
     @asyncio.coroutine
     def send_help_message(self, channel_id):

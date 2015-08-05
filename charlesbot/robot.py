@@ -47,7 +47,7 @@ class Robot(object):
             self.log.debug(
                 "Routing message %s to plugin %s" % (message, plugin)
             )
-            yield from plugin.q.put(message)
+            yield from plugin.queue_message(message)
 
     def exit_cleanly(self):
         loop = asyncio.get_event_loop()
