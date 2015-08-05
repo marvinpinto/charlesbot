@@ -60,7 +60,7 @@ class TestRobot(asynctest.TestCase):
             plugin = MagicMock()
             msg = "HelloPlugin"
             yield from test_robot.queue_message(msg, plugin)
-            expected = [call.q.put('HelloPlugin')]
+            expected = [call.queue_message('HelloPlugin')]
             self.assertEqual(plugin.method_calls, expected)
 
     def test_queue_message_actual_msg_2(self):
@@ -72,7 +72,7 @@ class TestRobot(asynctest.TestCase):
             plugin = MagicMock()
             msg = ["HelloPlugin"]
             yield from test_robot.queue_message(msg, plugin)
-            expected = [call.q.put(['HelloPlugin'])]
+            expected = [call.queue_message(['HelloPlugin'])]
             self.assertEqual(plugin.method_calls, expected)
 
     def test_route_message_to_plugin_empty_list(self):

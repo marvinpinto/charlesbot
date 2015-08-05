@@ -26,12 +26,70 @@ class TestHelpPlugin(asynctest.TestCase):
         m = p.match(help_str)
         self.assertTrue(m)
 
-    def test_parse_help_message_channel_msg_is_none(self):
+    def test_parse_help_message_channel_is_none(self):
         messages = [
             {
                 "type": "message",
                 "user": "U2147483697",
                 "text": "!help",
+            }
+        ]
+        yield from self.hp.process_message(messages)
+        self.hp.send_help_message.assert_has_calls([])
+
+    def test_parse_help_message_channel_is_empty(self):
+        messages = [
+            {
+                "type": "message",
+                "user": "U2147483697",
+                "text": "!help",
+                "channel": "",
+            }
+        ]
+        yield from self.hp.process_message(messages)
+        self.hp.send_help_message.assert_has_calls([])
+
+    def test_parse_help_message_msg_is_none(self):
+        messages = [
+            {
+                "type": "message",
+                "user": "U2147483697",
+                "channel": "C1",
+            }
+        ]
+        yield from self.hp.process_message(messages)
+        self.hp.send_help_message.assert_has_calls([])
+
+    def test_parse_help_message_msg_is_empty(self):
+        messages = [
+            {
+                "type": "message",
+                "user": "U2147483697",
+                "text": "",
+                "channel": "C1",
+            }
+        ]
+        yield from self.hp.process_message(messages)
+        self.hp.send_help_message.assert_has_calls([])
+
+    def test_parse_help_message_user_is_none(self):
+        messages = [
+            {
+                "type": "message",
+                "channel": "C1",
+                "text": "hello!",
+            }
+        ]
+        yield from self.hp.process_message(messages)
+        self.hp.send_help_message.assert_has_calls([])
+
+    def test_parse_help_message_user_is_empty(self):
+        messages = [
+            {
+                "type": "message",
+                "user": "",
+                "text": "hello!",
+                "channel": "C1",
             }
         ]
         yield from self.hp.process_message(messages)

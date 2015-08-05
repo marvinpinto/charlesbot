@@ -39,5 +39,5 @@ def parse_channel_message(msg):
     types = ['message']
     fields = ['channel', 'user', 'text']
     if not filter_message_types(msg, types, fields):
-        return None, None
-    return msg['channel'], msg['text']
+        return None, None, None
+    return msg['channel'], msg['text'], msg['user']

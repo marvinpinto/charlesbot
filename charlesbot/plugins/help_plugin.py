@@ -24,8 +24,8 @@ class Help(BasePlugin):
 
     @asyncio.coroutine
     def parse_help_message(self, msg):
-        channel, msg = parse_channel_message(msg)
-        if channel is None or msg is None:
+        channel, msg, user = parse_channel_message(msg)
+        if not channel or not msg or not user:
             return
         parsed = does_msg_contain_prefix("!help", msg)
         if parsed:
