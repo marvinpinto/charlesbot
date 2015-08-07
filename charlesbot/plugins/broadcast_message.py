@@ -86,6 +86,9 @@ class BroadcastMessage(BasePlugin):
 
         self.log_room_membership()
 
+    def handle_single_prefixed_message(self, channel_id):
+        pass
+
     @asyncio.coroutine
     def parse_wall_message(self, msg):
         channel, msg, sent_by = parse_channel_message(msg)

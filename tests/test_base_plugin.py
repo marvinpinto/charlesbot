@@ -15,6 +15,10 @@ class TestBasePlugin(asynctest.TestCase):
         def process_message(myself, message):
             myself.call_counter += 1
 
+        @asyncio.coroutine
+        def handle_single_prefixed_message(myself, channel_id):
+            pass
+
     def setUp(self):
         self.slack_client = MagicMock()
         self.initialize_dummy_plugin()

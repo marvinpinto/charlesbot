@@ -1,5 +1,3 @@
-from charlesbot.util.parse import does_msg_contain_prefix
-from charlesbot.util.parse import parse_channel_message
 from charlesbot.base_plugin import BasePlugin
 import asyncio
 
@@ -20,17 +18,8 @@ class Help(BasePlugin):
     @asyncio.coroutine
     def process_message(self, messages):
         for msg in messages:
-            yield from self.parse_help_message(msg)
+            yield from self.parse_single_prefixed_message(msg, "!help")
 
     @asyncio.coroutine
-    def parse_help_message(self, msg):
-        channel, msg, user = parse_channel_message(msg)
-        if not channel or not msg or not user:
-            return
-        parsed = does_msg_contain_prefix("!help", msg)
-        if parsed:
-            yield from self.send_help_message(channel)
-
-    @asyncio.coroutine
-    def send_help_message(self, channel_id):
+    def handle_single_prefixed_message(self, channel_id):
         self.sc.rtm_send_message(channel_id, self.get_help_message())
