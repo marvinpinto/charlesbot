@@ -1,0 +1,2 @@
+git+https://github.com/slackhq/python-slackclient.git@ba71b24603f63e54e704d0481812efcd9f7b8c14
+charlesbot==0.2
