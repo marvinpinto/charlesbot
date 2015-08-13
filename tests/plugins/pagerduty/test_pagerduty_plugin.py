@@ -22,9 +22,12 @@ class TestPagerdutyPlugin(asynctest.TestCase):
         self.addCleanup(patcher3.stop)
         self.mock_send_oncall_response = patcher3.start()
 
+        patcher4 = patch('charlesbot.plugins.pagerduty.pagerduty.Pagerduty.load_config')  # NOQA
+        self.addCleanup(patcher4.stop)
+        self.mock_load_config = patcher4.start()
+
         from charlesbot.plugins.pagerduty.pagerduty import Pagerduty
         self.pd = Pagerduty(self.slack_client)
-        self.pd.load_config = MagicMock()
         self.pd.token = "sekrittoken"
         self.pd.subdomain = "acmedomain"
         self.mock_schedule = CoroutineMock()

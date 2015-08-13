@@ -1,19 +1,17 @@
 import asynctest
 from asynctest.mock import MagicMock
 from asynctest.mock import call
-from charlesbot.plugins.pagerduty.pagerduty import Pagerduty
+from asynctest.mock import patch
 
 
 class TestProcessMessage(asynctest.TestCase):
 
     def setUp(self):
         self.slack_client = MagicMock()
-        self.initialize_pagerduty_plugin()
-
-    def tearDown(self):
-        self.initialize_pagerduty_plugin()
-
-    def initialize_pagerduty_plugin(self):
+        patcher = patch('charlesbot.plugins.pagerduty.pagerduty.Pagerduty.load_config')  # NOQA
+        self.addCleanup(patcher.stop)
+        self.mock_load_config = patcher.start()
+        from charlesbot.plugins.pagerduty.pagerduty import Pagerduty
         self.pd = Pagerduty(self.slack_client)
         self.pd.handle_single_prefixed_message = MagicMock()
 
