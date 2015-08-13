@@ -1,13 +1,19 @@
-from charlesbot.util.slack import slack_rtm_api_call
-from charlesbot.util.slack import get_robot_channel_membership
-from charlesbot.util.slack import get_robot_group_membership
-from charlesbot.util.slack import parse_user_info
-from charlesbot.util.parse import parse_msg_with_prefix
-from charlesbot.util.parse import filter_message_types
-from charlesbot.util.parse import parse_channel_message
+from charlesbot.util.slack import (
+    slack_rtm_api_call,
+    get_robot_channel_membership,
+    get_robot_group_membership,
+    parse_user_info
+)
+
+from charlesbot.util.parse import (
+    parse_msg_with_prefix,
+    filter_message_types,
+    parse_channel_message
+)
+
 from charlesbot.base_plugin import BasePlugin
+from charlesbot.slack.slack_attachment import SlackAttachment
 import asyncio
-import json
 
 
 class BroadcastMessage(BasePlugin):
@@ -112,21 +118,17 @@ class BroadcastMessage(BasePlugin):
     def send_broadcast_message(self, msg, user):
         wall = "Broadcast message from %s - %s" % (user['real_name'], msg)
 
-        attachment = [
-            {
-                "fallback": wall,
-                "author_name": user['real_name'],
-                "author_icon": user['thumb_24'],
-                "text": msg,
-            }
-        ]
+        attachment = SlackAttachment(fallback=wall,
+                                     author_name=user['real_name'],
+                                     author_icon=user['thumb_24'],
+                                     text=msg)
 
         for key in self.room_membership.keys():
             yield from slack_rtm_api_call(
                 self.sc,
                 'chat.postMessage',
                 channel=key,
-                attachments=json.dumps(attachment),
+                attachments=attachment,
                 as_user=False,
                 username="Broadcast Message",
                 icon_url="https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2015-07-26/8217958308_48.png"  # NOQA
