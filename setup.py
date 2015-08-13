@@ -40,7 +40,9 @@ setup(
 
     install_requires=[
         "slackclient",
-        "websocket-client"
+        "websocket-client",
+        "cchardet",
+        "aiohttp",
     ],
 
     test_suite='nose.collector'
