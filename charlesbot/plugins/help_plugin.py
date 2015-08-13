@@ -11,6 +11,7 @@ class Help(BasePlugin):
         msg = [
             "!help - This help message",
             "!wall <msg> - Broadcast a message to all channels I'm a part of",
+            "!oncall - Find out who's on-call right now",
         ]
         help_msg = "\n".join(msg)
         return "```\n%s\n```" % help_msg
