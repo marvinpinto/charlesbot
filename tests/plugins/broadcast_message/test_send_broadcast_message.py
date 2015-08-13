@@ -1,8 +1,8 @@
 import asynctest
-import json
 from asynctest.mock import call
 from asynctest.mock import patch
 from asynctest.mock import MagicMock
+from charlesbot.slack.slack_attachment import SlackAttachment
 
 
 class TestSendBroadcastMessage(asynctest.TestCase):
@@ -14,14 +14,12 @@ class TestSendBroadcastMessage(asynctest.TestCase):
         from charlesbot.plugins.broadcast_message import BroadcastMessage
         self.slack_client = MagicMock()
         self.bm = BroadcastMessage(self.slack_client)
-        self.expected_attachment = [
-            {
-                "fallback": "Broadcast message from bob - message",
-                "author_name": "bob",
-                "author_icon": "tumb",
-                "text": "message",
-            }
-        ]
+        self.expected_attachment = SlackAttachment(
+            fallback="Broadcast message from bob - message",
+            author_name="bob",
+            author_icon="tumb",
+            text="message"
+        )
 
     def test_in_no_rooms(self):
         self.mock_slack_rtm.reset_mock()
@@ -39,7 +37,7 @@ class TestSendBroadcastMessage(asynctest.TestCase):
             self.slack_client,
             'chat.postMessage',
             channel="1234",
-            attachments=json.dumps(self.expected_attachment),
+            attachments=self.expected_attachment,
             as_user=False,
             username="Broadcast Message",
             icon_url="https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2015-07-26/8217958308_48.png"  # NOQA
@@ -56,7 +54,7 @@ class TestSendBroadcastMessage(asynctest.TestCase):
             self.slack_client,
             'chat.postMessage',
             channel="1234",
-            attachments=json.dumps(self.expected_attachment),
+            attachments=self.expected_attachment,
             as_user=False,
             username="Broadcast Message",
             icon_url="https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2015-07-26/8217958308_48.png"  # NOQA
@@ -65,7 +63,7 @@ class TestSendBroadcastMessage(asynctest.TestCase):
             self.slack_client,
             'chat.postMessage',
             channel="4567",
-            attachments=json.dumps(self.expected_attachment),
+            attachments=self.expected_attachment,
             as_user=False,
             username="Broadcast Message",
             icon_url="https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2015-07-26/8217958308_48.png"  # NOQA
