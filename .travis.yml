@@ -3,6 +3,11 @@ sudo: false
 python:
   - "3.4"
 
+env:
+  global:
+    - secure: "unE0HcbJwVkVc70IQJtFHMgTYLdc0YfxjAQVkyf4zUGXJDG1DhGWwbwlmON8x2Xf9EW0633UlAi/AsLrnN6/S6CVLwsUOM2UF90RHeYFeU2+Lau+wlTAxXszAI9IL0T6mczncXWIQwvMWU7RDvtOaQVAmbAgyy9DUjaeEs8ZCIY168t/wN6sny2JoSPqabYOB+LL+gJgIb+JChyRqJ7nxAFeGONKl3AqrJMGL5W9UmfUkPfEPyeytHJmpoqEDQBRIvO3MIfw9Iw4Tmv+MYpxqh42Dj+GcghFlcX88AR5EWmo6Puh2FQNtqjBHbwPPNpjkZtRCz4JVvDXLnQkEyqV658aiz1q0UkHwUlQpt+GkJpjqCMLa+3rzi3RwVzgTLotC7WRITkL4rUkWoq0Dfb6qKyywVA2EwriU1Tnb7+LtG9TIeKCRp93RPh6v+izsOvBN1rJgaeZY98ROc7iRX3FV+3z0w0uPOlYJYslEERy1QYOmgwP3OJ0WrnpL99BgJfUU+8MzBk71Ll5R5+q4fIyImXPA9wx7DfCZBbD6dZOgPflyYfNpRPtDMDVHht2A7mfj7x4ba+k4s6iHNyc7Pn7ujCqNEMZe1EYAmS+BN7q2OtWkIMB0ZPZvMF2YveRUbNxBTDfiZAwbvkwDqAHo3to+8Pf4epvOY79WiDmHhrMsVQ="
+    - secure: "Fd398VFE5zlldVzoCMwdGdteVHbTiGUnitKJdAl4K/B3hxvd+icP36ezRIPpxlGGWFosoqTDR/ikr/WN2AKlzsQARHz8cANvJgZqN0XACzQxiz5pePlmZ6iakAfRxk0jJRwfnowjS1o2AE27jxJTXFVekLR9TSZJCK0tC+QVjcBHAdeXEZYA2S5wgDBIWIPobwrC2M9Ym+mXDM8vJx6TGPaxalmnT5sC4ea2K4+z0/faHPzjOlCnifsdJBW1NnEvIj0lyXEoOiuILakkB4v2XOsHeUl6+pcmKgd05G7EMIvze5rpjLJyGborjVD6bZNYEt72n1Pxli4AoupuzAZSvTTWQTNlY57UUEDWfd+xk2uGySNmYhPWbvc/tecsV5DHapiTBoUqascb/0eu6w2jPx6UWAwGtsu2thNXgxuN4CB+SBinKwwMinsnR3Hkb6kzcKEc0S0ohVzuI/LqNuZWjWam/KvnxY1Z55Sb9A1oe+YJYyaRDJe0U5RW1rVSeKe//8w9CFfvtdIyD22Q06Fhb21i1que8dinxHZjR/xp6CzDMwMjk3SL/3MPOf1BjASaXITs0aMVR6MOm+kjENc0nRFcUadu2QZITB8IUP2jFbY353bfo4YUwWK6yNdsUt5/So1UdYOqT7eaYAyYQcYuLAn2swOd2uMDNPHB4wTskRk="
+
 install:
   - make install
   - ./env/bin/pip install coveralls
@@ -22,6 +27,9 @@ deploy:
   on:
     tags: true
     repo: marvinpinto/charlesbot
+
+after_deploy:
+  - ./scripts/trigger_quayio.sh
 
 notifications:
   email: false
