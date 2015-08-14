@@ -6,7 +6,7 @@ Full details available at https://github.com/marvinpinto/charlesbot
 
 setup(
     name='charlesbot',
-    version='0.2',
+    version='0.3',
     description='Slack Real Time Messaging robot written in Python 3!',
     long_description=long_description,
     author='Marvin Pinto',
