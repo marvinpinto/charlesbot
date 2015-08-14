@@ -9,7 +9,7 @@ ADD ./requirements.txt /src/requirements.txt
 
 # Install python
 RUN apt-get update \
-  && apt-get install -y git python3 python3-dev libmysqlclient-dev python3.4-venv \
+  && apt-get install -y g++ git python3 python3-dev libmysqlclient-dev python3.4-venv \
   && apt-get clean autoclean \
   && apt-get autoremove -y --purge \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
