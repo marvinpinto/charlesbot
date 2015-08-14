@@ -9,6 +9,7 @@ and it'll get there eventually :)
 [![Build Status](https://travis-ci.org/marvinpinto/charlesbot.svg?branch=master)](https://travis-ci.org/marvinpinto/charlesbot)
 [![Code Climate](https://codeclimate.com/github/marvinpinto/charlesbot/badges/gpa.svg)](https://codeclimate.com/github/marvinpinto/charlesbot)
 [![Coverage Status](https://coveralls.io/repos/marvinpinto/charlesbot/badge.svg?branch=master&service=github)](https://coveralls.io/github/marvinpinto/charlesbot?branch=master)
+[![Docker Repository on Quay.io](https://quay.io/repository/marvin/charlesbot/status "Docker Repository on Quay.io")](https://quay.io/repository/marvin/charlesbot)
 
 
 
@@ -81,7 +82,7 @@ docker run \
   -it \
   -e "CHARLESBOT_SETTINGS_FILE=/config.ini" \
   -v /path/to/your/config.ini:/config.ini \
-  marvin/charlesbot
+  quay.io/marvin/charlesbot
 ```
 
 
