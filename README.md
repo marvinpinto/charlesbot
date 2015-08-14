@@ -7,7 +7,6 @@ Messaging][1] API. It is very much in development at the moment so bear with me
 and it'll get there eventually :)
 
 [![Build Status](https://travis-ci.org/marvinpinto/charlesbot.svg?branch=master)](https://travis-ci.org/marvinpinto/charlesbot)
-[![Code Climate](https://codeclimate.com/github/marvinpinto/charlesbot/badges/gpa.svg)](https://codeclimate.com/github/marvinpinto/charlesbot)
 [![Coverage Status](https://coveralls.io/repos/marvinpinto/charlesbot/badge.svg?branch=master&service=github)](https://coveralls.io/github/marvinpinto/charlesbot?branch=master)
 [![Docker Repository on Quay.io](https://quay.io/repository/marvin/charlesbot/status "Docker Repository on Quay.io")](https://quay.io/repository/marvin/charlesbot)
 
