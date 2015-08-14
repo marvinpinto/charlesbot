@@ -9,6 +9,7 @@ env:
     - secure: "Fd398VFE5zlldVzoCMwdGdteVHbTiGUnitKJdAl4K/B3hxvd+icP36ezRIPpxlGGWFosoqTDR/ikr/WN2AKlzsQARHz8cANvJgZqN0XACzQxiz5pePlmZ6iakAfRxk0jJRwfnowjS1o2AE27jxJTXFVekLR9TSZJCK0tC+QVjcBHAdeXEZYA2S5wgDBIWIPobwrC2M9Ym+mXDM8vJx6TGPaxalmnT5sC4ea2K4+z0/faHPzjOlCnifsdJBW1NnEvIj0lyXEoOiuILakkB4v2XOsHeUl6+pcmKgd05G7EMIvze5rpjLJyGborjVD6bZNYEt72n1Pxli4AoupuzAZSvTTWQTNlY57UUEDWfd+xk2uGySNmYhPWbvc/tecsV5DHapiTBoUqascb/0eu6w2jPx6UWAwGtsu2thNXgxuN4CB+SBinKwwMinsnR3Hkb6kzcKEc0S0ohVzuI/LqNuZWjWam/KvnxY1Z55Sb9A1oe+YJYyaRDJe0U5RW1rVSeKe//8w9CFfvtdIyD22Q06Fhb21i1que8dinxHZjR/xp6CzDMwMjk3SL/3MPOf1BjASaXITs0aMVR6MOm+kjENc0nRFcUadu2QZITB8IUP2jFbY353bfo4YUwWK6yNdsUt5/So1UdYOqT7eaYAyYQcYuLAn2swOd2uMDNPHB4wTskRk="
 
 install:
+  - pip install -U twine
   - make install
   - ./env/bin/pip install coveralls
 
