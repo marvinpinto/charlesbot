@@ -1,8 +1,7 @@
 from charlesbot.util.slack import (
     slack_rtm_api_call,
     get_robot_channel_membership,
-    get_robot_group_membership,
-    parse_user_info
+    get_robot_group_membership
 )
 
 from charlesbot.util.parse import (
@@ -13,6 +12,7 @@ from charlesbot.util.parse import (
 
 from charlesbot.base_plugin import BasePlugin
 from charlesbot.slack.slack_attachment import SlackAttachment
+from charlesbot.slack.slack_user import SlackUser
 import asyncio
 
 
@@ -21,7 +21,6 @@ class BroadcastMessage(BasePlugin):
     def __init__(self, slack_client):
         super().__init__(slack_client, "Broadcast Message")
         self.room_membership = {}
-        self.robot_info = {}
         self.seed_initial_data()
 
     def seed_initial_data(self):
@@ -102,25 +101,17 @@ class BroadcastMessage(BasePlugin):
             return
         parsed = parse_msg_with_prefix("!wall", msg)
         if parsed:
-            user = yield from self.get_user_info(sent_by)
+            user = SlackUser()
+            yield from user.retrieve_slack_user_info(self.sc, sent_by)
             yield from self.send_broadcast_message(parsed, user)
 
     @asyncio.coroutine
-    def get_user_info(self, user_id):
-        result = yield from slack_rtm_api_call(
-            self.sc,
-            'users.info',
-            user=user_id
-        )
-        return parse_user_info(result)
-
-    @asyncio.coroutine
     def send_broadcast_message(self, msg, user):
-        wall = "Broadcast message from %s - %s" % (user['real_name'], msg)
+        wall = "Broadcast message from %s - %s" % (user.real_name, msg)
 
         attachment = SlackAttachment(fallback=wall,
-                                     author_name=user['real_name'],
-                                     author_icon=user['thumb_24'],
+                                     author_name=user.real_name,
+                                     author_icon=user.image_24,
                                      text=msg)
 
         for key in self.room_membership.keys():
