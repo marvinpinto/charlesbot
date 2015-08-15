@@ -15,7 +15,7 @@ def slack_rtm_api_call(slack_client, api_endpoint, **kwargs):
             str(json_str['ok'])
         )
         log.error(json_str)
-        return json.dumps("[]")
+        return json.dumps("{}")
     return json.dumps(json_str)
 
 

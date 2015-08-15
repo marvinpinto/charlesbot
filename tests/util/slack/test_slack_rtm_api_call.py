@@ -29,7 +29,7 @@ class TestSlackRtmApiCall(asynctest.TestCase):
         fake_client = SlackClient("faketoken")
         fake_client.api_call = MagicMock(return_value=channel_list)
         val = yield from slack_rtm_api_call(fake_client, "fake_endpoint")
-        self.assertEqual(json.loads(val), '[]')
+        self.assertEqual(json.loads(val), '{}')
 
     def test_slack_rtm_api_call_not_encoded_utf8(self):
         channel_list = self.channel_list_three
