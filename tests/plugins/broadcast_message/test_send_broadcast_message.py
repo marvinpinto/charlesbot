@@ -3,6 +3,7 @@ from asynctest.mock import call
 from asynctest.mock import patch
 from asynctest.mock import MagicMock
 from charlesbot.slack.slack_attachment import SlackAttachment
+from charlesbot.slack.slack_user import SlackUser
 
 
 class TestSendBroadcastMessage(asynctest.TestCase):
@@ -20,19 +21,18 @@ class TestSendBroadcastMessage(asynctest.TestCase):
             author_icon="tumb",
             text="message"
         )
+        self.su = SlackUser(real_name="bob", image_24="tumb")
 
     def test_in_no_rooms(self):
         self.mock_slack_rtm.reset_mock()
-        user = {"real_name": "bob", "thumb_24": "tumb"}
         self.bm.room_membership = {}
-        yield from self.bm.send_broadcast_message("message", user)
+        yield from self.bm.send_broadcast_message("message", self.su)
         self.assertEqual(self.mock_slack_rtm.call_args, None)
 
     def test_in_one_room(self):
         self.mock_slack_rtm.reset_mock()
-        user = {"real_name": "bob", "thumb_24": "tumb"}
         self.bm.room_membership = {"1234": "fun"}
-        yield from self.bm.send_broadcast_message("message", user)
+        yield from self.bm.send_broadcast_message("message", self.su)
         expected_call = call(
             self.slack_client,
             'chat.postMessage',
@@ -47,9 +47,8 @@ class TestSendBroadcastMessage(asynctest.TestCase):
 
     def test_in_two_rooms(self):
         self.mock_slack_rtm.reset_mock()
-        user = {"real_name": "bob", "thumb_24": "tumb"}
         self.bm.room_membership = {"1234": "fun", "4567": "funner"}
-        yield from self.bm.send_broadcast_message("message", user)
+        yield from self.bm.send_broadcast_message("message", self.su)
         expected_call_1 = call(
             self.slack_client,
             'chat.postMessage',

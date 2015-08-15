@@ -19,16 +19,6 @@ def slack_rtm_api_call(slack_client, api_endpoint, **kwargs):
     return json.dumps(json_str)
 
 
-def parse_user_info(users_info):
-    user = {}
-    json_resp = json.loads(users_info)
-    user.update({"id": json_resp['user']['id']})
-    user.update({"username": json_resp['user']['name']})
-    user.update({"real_name": json_resp['user']['profile']['real_name']})
-    user.update({"thumb_24": json_resp['user']['profile']['image_24']})
-    return user
-
-
 def get_robot_info(auth_test):
     json_str = json.loads(auth_test)
     robot_name = json_str["user"]
