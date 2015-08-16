@@ -7,6 +7,10 @@ from asynctest.mock import MagicMock
 class TestRobot(asynctest.TestCase):
 
     @asynctest.ignore_loop
+    def test_dummy(self):
+        pass
+
+    @asynctest.ignore_loop
     def test_slack_connect_exit(self):
         with patch('charlesbot.robot.Robot.__init__') as mock_init:
             with patch('charlesbot.robot.Robot.connect') as mock_connect:
@@ -87,36 +91,6 @@ class TestRobot(asynctest.TestCase):
             yield from test_robot.route_message_to_plugin()
             self.assertEqual(test_robot.sc.rtm_read.call_count, 1)
             self.assertEqual(test_robot.queue_message.call_count, 0)
-            self.assertEqual(test_robot.log.error.call_count, 0)
-            self.assertEqual(test_robot.log.debug.call_count, 0)
-
-    def test_route_message_to_plugin_list_one(self):
-        with patch('charlesbot.robot.Robot.__init__') as mock_init:
-            from charlesbot.robot import Robot
-            mock_init.return_value = None
-            test_robot = Robot()
-            test_robot.log = MagicMock()
-            test_robot.sc = MagicMock()
-            test_robot.queue_message = MagicMock()
-            test_robot.plugin_list = ["plug1"]
-            yield from test_robot.route_message_to_plugin()
-            self.assertEqual(test_robot.sc.rtm_read.call_count, 1)
-            self.assertEqual(test_robot.queue_message.call_count, 1)
-            self.assertEqual(test_robot.log.error.call_count, 0)
-            self.assertEqual(test_robot.log.debug.call_count, 0)
-
-    def test_route_message_to_plugin_list_multiple(self):
-        with patch('charlesbot.robot.Robot.__init__') as mock_init:
-            from charlesbot.robot import Robot
-            mock_init.return_value = None
-            test_robot = Robot()
-            test_robot.log = MagicMock()
-            test_robot.sc = MagicMock()
-            test_robot.queue_message = MagicMock()
-            test_robot.plugin_list = ["plug1", "plug2"]
-            yield from test_robot.route_message_to_plugin()
-            self.assertEqual(test_robot.sc.rtm_read.call_count, 1)
-            self.assertEqual(test_robot.queue_message.call_count, 2)
             self.assertEqual(test_robot.log.error.call_count, 0)
             self.assertEqual(test_robot.log.debug.call_count, 0)
 
