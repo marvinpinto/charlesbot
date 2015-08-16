@@ -2,6 +2,8 @@ import asynctest
 from asynctest.mock import MagicMock
 from asynctest.mock import CoroutineMock
 from charlesbot.plugins.broadcast_message import BroadcastMessage
+from charlesbot.slack.slack_group_left import SlackGroupLeft
+from charlesbot.slack.slack_channel_left import SlackChannelLeft
 
 
 class TestRemoveFromRoom(asynctest.TestCase):
@@ -21,74 +23,43 @@ class TestRemoveFromRoom(asynctest.TestCase):
         self.bm.room_membership = {}
 
     def test_invalid_input_single(self):
-        msg = [{}]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.bm.room_membership, {})
-
-    def test_invalid_input_multiple(self):
-        msg = [{}, {}, {}]
+        msg = {}
         yield from self.bm.process_message(msg)
         self.assertEqual(self.bm.room_membership, {})
 
     def test_not_in_any_rooms_single(self):
-        msg = [
-            {
-                "type": "channel_left",
-                "channel": "C024BE91L"
-            }
-        ]
+        msg = SlackChannelLeft(type="channel_left", channel="C024BE91L")
         yield from self.bm.process_message(msg)
         self.assertEqual(self.bm.room_membership, {})
 
     def test_not_in_any_rooms_multiple(self):
-        msg = [
-            {
-                "type": "channel_left",
-                "channel": "C1"
-            },
-            {
-                "type": "group_left",
-                "channel": "G1"
-            },
-            {
-                "type": "channel_left",
-                "channel": "C2"
-            },
-            {
-                "type": "group_left",
-                "channel": "G2"
-            },
-        ]
+        msg = SlackChannelLeft(channel="C1")
+        yield from self.bm.process_message(msg)
+        msg = SlackGroupLeft(channel="G1")
+        yield from self.bm.process_message(msg)
+        msg = SlackChannelLeft(channel="C2")
+        yield from self.bm.process_message(msg)
+        msg = SlackGroupLeft(channel="G2")
+        yield from self.bm.process_message(msg)
         yield from self.bm.process_message(msg)
         self.assertEqual(self.bm.room_membership, {})
 
     def test_remove_from_bogus_room(self):
         self.bm.room_membership = {"1": "fun1"}
-        msg = [
-            {
-                "type": "channel_left",
-                "channel": "2"
-            }
-        ]
+        msg = SlackChannelLeft(channel="C2")
+        yield from self.bm.process_message(msg)
         expected = {
             "1": "fun1",
         }
         yield from self.bm.process_message(msg)
         self.assertEqual(self.bm.room_membership, expected)
 
-    @asynctest.ignore_loop
     def test_remove_from_one_room(self):
         self.bm.room_membership = {"1": "fun1"}
-        msg = [
-            {
-                "type": "channel_left",
-                "channel": "1"
-            }
-        ]
+        msg = SlackChannelLeft(channel="1")
         yield from self.bm.process_message(msg)
         self.assertEqual(self.bm.room_membership, {})
 
-    @asynctest.ignore_loop
     def test_remove_from_multiple_rooms(self):
         self.bm.room_membership = {
             "1": "fun1",
@@ -97,26 +68,15 @@ class TestRemoveFromRoom(asynctest.TestCase):
             "4": "fun4",
             "5": "fun5",
         }
-        msg = [
-            {
-                "type": "channel_left",
-                "channel": "2"
-            },
-            {
-                "type": "group_left",
-                "channel": "1"
-            },
-            {
-                "type": "group_left",
-                "channel": "4"
-            },
-            {
-                "type": "channel_left",
-                "channel": "5"
-            },
-        ]
+        msg = SlackChannelLeft(channel="2")
+        yield from self.bm.process_message(msg)
+        msg = SlackGroupLeft(channel="1")
+        yield from self.bm.process_message(msg)
+        msg = SlackGroupLeft(channel="4")
+        yield from self.bm.process_message(msg)
+        msg = SlackChannelLeft(channel="5")
+        yield from self.bm.process_message(msg)
         expected = {
             "3": "fun3",
         }
-        yield from self.bm.process_message(msg)
         self.assertEqual(self.bm.room_membership, expected)
