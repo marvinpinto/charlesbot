@@ -15,14 +15,8 @@ class TestBaseObject(unittest.TestCase):
         def __init__(myself, **kwargs):
             super().__init__(**kwargs)
 
-        def is_compatible(object_dict):
-            return True
-
     def setUp(self):
         self.dc = TestBaseObject.DummyObject()
-
-    def test_compatibility(self):
-        self.assertTrue(TestBaseObject.DummyObject.is_compatible({}))
 
     def test_add_extra_property(self):
         property_dict = {

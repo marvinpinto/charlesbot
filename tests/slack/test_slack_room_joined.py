@@ -16,14 +16,15 @@ class TestSlackRoomJoined(unittest.TestCase):
         def __init__(myself, **kwargs):
             super().__init__(**kwargs)
 
-        def is_compatible(object_dict):
-            return True
+        @property
+        def compatibility_key(self):
+            return "dummykey"
 
     def setUp(self):
         self.dc = TestSlackRoomJoined.DummyObject()
 
     def test_compatibility(self):
-        self.assertTrue(TestSlackRoomJoined.DummyObject.is_compatible({}))
+        self.assertTrue(self.dc.is_compatible({"type": "dummykey"}))
 
     def test_add_extra_property(self):
         property_dict = {

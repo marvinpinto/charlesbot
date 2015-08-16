@@ -15,10 +15,6 @@ class BaseObject(metaclass=ABCMeta):
             default = getattr(self, prop)
             setattr(self, prop, object_dict.get(prop, default))
 
-    @abstractmethod
-    def is_compatible(object_dict):
-        pass
-
     def __str__(self):
         return_dict = {}
         for prop in self.properties:

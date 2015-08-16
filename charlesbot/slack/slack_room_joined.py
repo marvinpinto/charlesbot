@@ -1,14 +1,14 @@
-from abc import ABCMeta, abstractmethod
-from charlesbot.base_object import BaseObject
+from abc import ABCMeta, abstractproperty
+from charlesbot.slack.slack_base_object import SlackBaseObject
 
 
-class SlackRoomJoined(BaseObject, metaclass=ABCMeta):
+class SlackRoomJoined(SlackBaseObject, metaclass=ABCMeta):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    @abstractmethod
-    def is_compatible(object_dict):
+    @abstractproperty
+    def compatibility_key(self):
         pass
 
     def load(self, object_dict):
