@@ -2,6 +2,7 @@ import asynctest
 import asyncio
 from asynctest.mock import MagicMock
 from charlesbot.base_plugin import BasePlugin
+from charlesbot.slack.slack_message import SlackMessage
 
 
 class TestBasePlugin(asynctest.TestCase):
@@ -67,3 +68,34 @@ class TestBasePlugin(asynctest.TestCase):
         yield from self.dc.consume()
         self.assertEqual(self.dc._q.qsize(), 1)
         self.assertEqual(self.dc.call_counter, 2)
+
+    def test_bot_message_wrong_object_type(self):
+        self.assertEqual(self.dc.call_counter, 0)
+        self.dc.is_running = MagicMock()
+        self.dc.is_running.side_effect = [True, False]
+        yield from self.dc.queue_message("one")
+        yield from self.dc.consume()
+        self.assertEqual(self.dc._q.qsize(), 0)
+        self.assertEqual(self.dc.call_counter, 1)
+
+    def test_bot_message_wrong_subtype(self):
+        self.assertEqual(self.dc.call_counter, 0)
+        self.dc.is_running = MagicMock()
+        self.dc.is_running.side_effect = [True, False]
+        msg = SlackMessage(type="message", text="hello")
+        yield from self.dc.queue_message(msg)
+        yield from self.dc.consume()
+        self.assertEqual(self.dc._q.qsize(), 0)
+        self.assertEqual(self.dc.call_counter, 1)
+
+    def test_bot_message(self):
+        self.assertEqual(self.dc.call_counter, 0)
+        self.dc.is_running = MagicMock()
+        self.dc.is_running.side_effect = [True, False]
+        msg = SlackMessage(type="message",
+                           text="hello",
+                           subtype="bot_message")
+        yield from self.dc.queue_message(msg)
+        yield from self.dc.consume()
+        self.assertEqual(self.dc._q.qsize(), 0)
+        self.assertEqual(self.dc.call_counter, 0)
