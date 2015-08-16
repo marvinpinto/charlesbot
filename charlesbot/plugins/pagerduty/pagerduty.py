@@ -1,6 +1,8 @@
 import asyncio
 from datetime import datetime
 from charlesbot.base_plugin import BasePlugin
+from charlesbot.util.parse import does_msg_contain_prefix
+from charlesbot.slack.slack_message import SlackMessage
 
 from charlesbot.util.config import (
     get_config_file_name,
@@ -26,12 +28,14 @@ class Pagerduty(BasePlugin):
         self.subdomain = config.get('pagerduty', 'subdomain')
 
     @asyncio.coroutine
-    def process_message(self, messages):
-        for msg in messages:
-            yield from self.parse_single_prefixed_message(msg, "!oncall")
+    def process_message(self, message):
+        if not type(message) is SlackMessage:
+            return
+        if does_msg_contain_prefix("!oncall", message.text):
+            yield from self.send_who_is_on_call_message(message.channel)
 
     @asyncio.coroutine
-    def handle_single_prefixed_message(self, channel_id):
+    def send_who_is_on_call_message(self, channel_id):
         schedules = yield from get_pagerduty_schedules(self.token,
                                                        self.subdomain)
         time_period = datetime.now().isoformat()

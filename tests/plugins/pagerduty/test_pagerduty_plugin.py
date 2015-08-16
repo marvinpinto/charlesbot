@@ -3,6 +3,7 @@ from asynctest.mock import MagicMock
 from asynctest.mock import CoroutineMock
 from asynctest.mock import patch
 from asynctest.mock import call
+from charlesbot.slack.slack_message import SlackMessage
 
 
 class TestPagerdutyPlugin(asynctest.TestCase):
@@ -32,30 +33,29 @@ class TestPagerdutyPlugin(asynctest.TestCase):
         self.pd.subdomain = "acmedomain"
         self.mock_schedule = CoroutineMock()
 
+    def test_one_msg_wrong_object_type(self):
+        msg = ""
+        yield from self.pd.process_message(msg)
+        self.assertEqual(self.mock_get_pagerduty_schedules.mock_calls, [])
+        self.assertEqual(self.mock_get_oncall_users.mock_calls, [])
+        self.assertEqual(self.mock_send_oncall_response.mock_calls, [])
+
     def test_one_msg_no_good(self):
-        messages = [
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "This is not me asking for the oncall schedule",
-            }
-        ]
-        yield from self.pd.process_message(messages)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="Don't want it")
+        yield from self.pd.process_message(msg)
         self.assertEqual(self.mock_get_pagerduty_schedules.mock_calls, [])
         self.assertEqual(self.mock_get_oncall_users.mock_calls, [])
         self.assertEqual(self.mock_send_oncall_response.mock_calls, [])
 
     def test_one_msg_one_good(self):
-        messages = [
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "!oncall",
-            }
-        ]
-        yield from self.pd.process_message(messages)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="!oncall")
+        yield from self.pd.process_message(msg)
         self.mock_get_pagerduty_schedules.return_value = [self.mock_schedule]
         expected = call("sekrittoken", "acmedomain")
         self.assertEqual(self.mock_get_pagerduty_schedules.mock_calls,
@@ -64,41 +64,31 @@ class TestPagerdutyPlugin(asynctest.TestCase):
         self.assertEqual(len(self.mock_send_oncall_response.mock_calls), 1)
 
     def test_two_msgs_no_good(self):
-        messages = [
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "Don't need no oncall schedule",
-            },
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "Nope, don't want it",
-            }
-        ]
-        yield from self.pd.process_message(messages)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="Don't need no oncall schedule")
+        yield from self.pd.process_message(msg)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="Nope, don't want it")
+        yield from self.pd.process_message(msg)
         self.assertEqual(len(self.mock_get_pagerduty_schedules.mock_calls), 0)
         self.assertEqual(len(self.mock_get_oncall_users.mock_calls), 0)
         self.assertEqual(len(self.mock_send_oncall_response.mock_calls), 0)
 
     def test_two_msgs_one_good(self):
-        messages = [
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "!oncall",
-            },
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "Nope, don't want it",
-            }
-        ]
-        yield from self.pd.process_message(messages)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="!oncall")
+        yield from self.pd.process_message(msg)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="Nope, don't want it")
+        yield from self.pd.process_message(msg)
         self.mock_get_pagerduty_schedules.return_value = [self.mock_schedule]
         expected = call("sekrittoken", "acmedomain")
         self.assertEqual(self.mock_get_pagerduty_schedules.mock_calls,
@@ -107,21 +97,16 @@ class TestPagerdutyPlugin(asynctest.TestCase):
         self.assertEqual(len(self.mock_send_oncall_response.mock_calls), 1)
 
     def test_two_msgs_two_good(self):
-        messages = [
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "!oncall",
-            },
-            {
-                "type": "message",
-                "user": "PDUSER1",
-                "channel": "C1",
-                "text": "!oncall",
-            }
-        ]
-        yield from self.pd.process_message(messages)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="!oncall")
+        yield from self.pd.process_message(msg)
+        msg = SlackMessage(type="message",
+                           user="PDUSER1",
+                           channel="C1",
+                           text="!oncall")
+        yield from self.pd.process_message(msg)
         self.assertEqual(len(self.mock_get_pagerduty_schedules.mock_calls), 2)
         self.assertEqual(len(self.mock_get_oncall_users.mock_calls), 2)
         self.assertEqual(len(self.mock_send_oncall_response.mock_calls), 2)

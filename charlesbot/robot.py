@@ -33,13 +33,33 @@ class Robot(object):
     @asyncio.coroutine
     def route_message_to_plugin(self):
         try:
-            msg = self.sc.rtm_read()
-            for plug in self.plugin_list:
-                yield from self.queue_message(msg, plug)
+            messages = self.sc.rtm_read()
+            for msg in messages:
+                message_object = self.get_message_type(msg)
+                for plug in self.plugin_list:
+                    yield from self.queue_message(message_object, plug)
         except BrokenPipeError as b:
             self.log.error("Error reading from slack socket: %s" % b)
             self.log.debug(traceback.format_exc())
         yield from asyncio.sleep(0.5)
+
+    def get_message_type(self, msg):
+        import importlib
+        obj_list = [
+            "charlesbot.slack.slack_channel_joined.SlackChannelJoined",
+            "charlesbot.slack.slack_channel_left.SlackChannelLeft",
+            "charlesbot.slack.slack_group_joined.SlackGroupJoined",
+            "charlesbot.slack.slack_group_left.SlackGroupLeft",
+            "charlesbot.slack.slack_message.SlackMessage",
+        ]
+        for obj in obj_list:
+            module_name, class_name = obj.rsplit(".", 1)
+            obj_class = getattr(importlib.import_module(module_name), class_name)  # NOQA
+            return_obj = obj_class()
+
+            if getattr(return_obj, 'is_compatible')(msg):
+                return_obj.load(msg)
+                return return_obj
 
     @asyncio.coroutine
     def queue_message(self, message, plugin):

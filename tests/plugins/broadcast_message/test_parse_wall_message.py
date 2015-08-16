@@ -2,6 +2,7 @@ import asynctest
 from asynctest.mock import call
 from asynctest.mock import MagicMock
 from asynctest.mock import patch
+from charlesbot.slack.slack_message import SlackMessage
 
 
 class TestParseWallMessage(asynctest.TestCase):
@@ -31,134 +32,26 @@ class TestParseWallMessage(asynctest.TestCase):
         self.slack_client = MagicMock()
         self.bm = BroadcastMessage(self.slack_client)
 
-    def test_invalid_input_single(self):
-        msg = [{}]
+    def test_type_is_not_slack_message(self):
+        msg = ""
         yield from self.bm.process_message(msg)
         self.assertEqual(self.mock_slack_user.mock_calls, [])
         self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
 
-    def test_invalid_input_multiple(self):
-        msg = [{}, {}, {}]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_channel_is_empty(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "",
-                "text": "!wall hello everyone",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_channel_is_none(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "text": "!wall hello everyone",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_msg_is_empty(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-                "text": "",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_msg_is_none(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_sent_by_is_empty(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "",
-                "channel": "C1",
-                "text": "text",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_sent_by_is_none(self):
-        msg = [
-            {
-                "type": "message",
-                "channel": "C1",
-                "text": "text",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_parsed_failed_single(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-                "text": "This is not a wall message",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        self.assertEqual(self.mock_slack_user.mock_calls, [])
-        self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
-
-    def test_parsed_failed_multiple(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-                "text": "This is not a wall message",
-            },
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-                "text": "And neither is this!",
-            },
-        ]
+    def test_prefix_is_not_wall(self):
+        msg = SlackMessage(type="message",
+                           channel="chan1",
+                           user="marvin",
+                           text="Not a wall message")
         yield from self.bm.process_message(msg)
         self.assertEqual(self.mock_slack_user.mock_calls, [])
         self.assertEqual(self.mock_send_broadcast_message.mock_calls, [])
 
     def test_ok_single(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-                "text": "!wall This is totes a wall message",
-            }
-        ]
+        msg = SlackMessage(type="message",
+                           channel="C1",
+                           user="marvin",
+                           text="!wall This is totes a wall message")
         yield from self.bm.process_message(msg)
         expected_slack_user_calls = [
             call(),
@@ -166,29 +59,3 @@ class TestParseWallMessage(asynctest.TestCase):
         ]
         self.mock_slack_user.assert_has_calls(expected_slack_user_calls)
         self.assertEqual(len(self.mock_send_broadcast_message.mock_calls), 1)
-
-    def test_ok_multiple(self):
-        msg = [
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-                "text": "!wall This is totes a wall message",
-            },
-            {
-                "type": "message",
-                "user": "marvin",
-                "channel": "C1",
-                "text": "!wall And so is this!",
-            }
-        ]
-        yield from self.bm.process_message(msg)
-        expected_slack_user_calls = [
-            call(),
-            call(self.slack_client, "marvin"),
-            call(),
-            call(),
-            call(self.slack_client, "marvin")
-        ]
-        self.mock_slack_user.assert_has_calls(expected_slack_user_calls)
-        self.assertEqual(len(self.mock_send_broadcast_message.mock_calls), 2)

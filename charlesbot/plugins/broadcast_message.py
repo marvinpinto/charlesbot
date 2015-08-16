@@ -6,14 +6,19 @@ from charlesbot.util.slack import (
 
 from charlesbot.util.parse import (
     parse_msg_with_prefix,
-    filter_message_types,
-    parse_channel_message
+    does_msg_contain_prefix
 )
 
 from charlesbot.base_plugin import BasePlugin
 from charlesbot.slack.slack_attachment import SlackAttachment
 from charlesbot.slack.slack_user import SlackUser
 import asyncio
+
+from charlesbot.slack.slack_channel_joined import SlackChannelJoined
+from charlesbot.slack.slack_channel_left import SlackChannelLeft
+from charlesbot.slack.slack_group_joined import SlackGroupJoined
+from charlesbot.slack.slack_group_left import SlackGroupLeft
+from charlesbot.slack.slack_message import SlackMessage
 
 
 class BroadcastMessage(BasePlugin):
@@ -51,59 +56,44 @@ class BroadcastMessage(BasePlugin):
         self.log_room_membership()
 
     @asyncio.coroutine
-    def process_message(self, messages):
-        for msg in messages:
-            tasks = [
-                self.add_to_room(msg),
-                self.remove_from_room(msg),
-                self.parse_wall_message(msg)
-            ]
-            yield from asyncio.gather(*tasks)
+    def process_message(self, message):
+        tasks = [
+            self.add_to_room(message),
+            self.remove_from_room(message),
+            self.parse_wall_message(message)
+        ]
+        yield from asyncio.gather(*tasks)
 
     @asyncio.coroutine
-    def add_to_room(self, msg):
-        types = ['group_joined', 'channel_joined']
-        fields = ['channel']
-        if not filter_message_types(msg, types, fields):
+    def add_to_room(self, message):
+        if not type(message) is SlackChannelJoined and not type(message) is SlackGroupJoined:  # NOQA
             return
-        room_name = msg['channel']['name']
-        room_id = msg['channel']['id']
-        self.room_membership.update({room_id: room_name})
-        self.log.info("I was invited to join %s" % room_name)
+        self.room_membership.update({message.id: message.name})
+        self.log.info("I was invited to join %s" % message.name)
         self.log_room_membership()
 
     @asyncio.coroutine
-    def remove_from_room(self, msg):
-        types = ['group_left', 'channel_left']
-        fields = ['channel']
-        if not filter_message_types(msg, types, fields):
+    def remove_from_room(self, message):
+        if not type(message) is SlackChannelLeft and not type(message) is SlackGroupLeft:  # NOQA
             return
-        room_id = msg['channel']
-
-        room_name = ""
-        if room_id in self.room_membership:
-            room_name = self.room_membership[room_id]
-
-        self.room_membership.pop(room_id, None)
-
+        room_name = self.room_membership.get(message.channel, "")
+        self.room_membership.pop(message.channel, None)
         if room_name:
             self.log.info("I have been removed from %s" % room_name)
-
         self.log_room_membership()
 
-    def handle_single_prefixed_message(self, channel_id):
-        pass
-
     @asyncio.coroutine
-    def parse_wall_message(self, msg):
-        channel, msg, sent_by = parse_channel_message(msg)
-        if not channel or not msg or not sent_by:
+    def parse_wall_message(self, message):
+        if not type(message) is SlackMessage:
             return
-        parsed = parse_msg_with_prefix("!wall", msg)
-        if parsed:
-            user = SlackUser()
-            yield from user.retrieve_slack_user_info(self.sc, sent_by)
-            yield from self.send_broadcast_message(parsed, user)
+        if not does_msg_contain_prefix("!wall", message.text):
+            return
+        parsed_message = parse_msg_with_prefix("!wall", message.text)
+        if not parsed_message:
+            return
+        slack_user = SlackUser()
+        yield from slack_user.retrieve_slack_user_info(self.sc, message.user)
+        yield from self.send_broadcast_message(parsed_message, slack_user)
 
     @asyncio.coroutine
     def send_broadcast_message(self, msg, user):

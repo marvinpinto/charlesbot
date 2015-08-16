@@ -1,6 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from charlesbot.util.parse import parse_channel_message
-from charlesbot.util.parse import does_msg_contain_prefix
 import asyncio
 import logging
 
@@ -19,19 +17,6 @@ class BasePlugin(metaclass=ABCMeta):
     def initialize_queue_consumer(self):
         loop = asyncio.get_event_loop()
         loop.create_task(self.consume())
-
-    @asyncio.coroutine
-    def parse_single_prefixed_message(self, msg, prefix):
-        channel, msg, sent_by = parse_channel_message(msg)
-        if not channel or not msg or not sent_by:
-            return
-        parsed = does_msg_contain_prefix(prefix, msg)
-        if parsed:
-            yield from self.handle_single_prefixed_message(channel)
-
-    @abstractmethod
-    def handle_single_prefixed_message(self, channel_id):
-        pass
 
     @asyncio.coroutine
     def consume(self):
@@ -53,5 +38,5 @@ class BasePlugin(metaclass=ABCMeta):
         yield from self._q.put(message)
 
     @abstractmethod
-    def process_message(self, messages):
+    def process_message(self, message):
         pass

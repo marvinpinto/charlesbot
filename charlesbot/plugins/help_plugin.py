@@ -1,4 +1,6 @@
 from charlesbot.base_plugin import BasePlugin
+from charlesbot.util.parse import does_msg_contain_prefix
+from charlesbot.slack.slack_message import SlackMessage
 import asyncio
 
 
@@ -17,10 +19,12 @@ class Help(BasePlugin):
         return "```\n%s\n```" % help_msg
 
     @asyncio.coroutine
-    def process_message(self, messages):
-        for msg in messages:
-            yield from self.parse_single_prefixed_message(msg, "!help")
+    def process_message(self, message):
+        if not type(message) is SlackMessage:
+            return
+        if does_msg_contain_prefix("!help", message.text):
+            yield from self.send_help_message(message.channel)
 
     @asyncio.coroutine
-    def handle_single_prefixed_message(self, channel_id):
+    def send_help_message(self, channel_id):
         self.sc.rtm_send_message(channel_id, self.get_help_message())
