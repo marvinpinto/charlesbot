@@ -81,8 +81,8 @@ class TestGetPagerdutySchedules(asynctest.TestCase):
         expected = PagerdutySchedule(
             description="",
             escalation_policies=[{"id": "P46664", "name": "Team Escalation"}],
-            schedule_id="P123456",
-            schedule_name="On call schedule name",
+            id="P123456",
+            name="On call schedule name",
         )
         schedules = yield from self.get_schedules(self.token, self.subdomain)
         self.assertEqual(len(schedules), 1)
@@ -109,8 +109,8 @@ class TestGetPagerdutySchedules(asynctest.TestCase):
         expected = PagerdutySchedule(
             description="",
             escalation_policies=[{"id": "P46664", "name": "Team Escalation"}],
-            schedule_id="P123456",
-            schedule_name="On call schedule name",
+            id="P123456",
+            name="On call schedule name",
             time_zone="Eastern Time (US & Canada)",
             oncall_users=[]
         )
@@ -153,15 +153,15 @@ class TestGetPagerdutySchedules(asynctest.TestCase):
         expected_1 = PagerdutySchedule(
             description="",
             escalation_policies=[{"id": "ESC1", "name": "Escalation 1"}],
-            schedule_id="SCHED1",
-            schedule_name="Schedule 1",
+            id="SCHED1",
+            name="Schedule 1",
             time_zone="Eastern Time (US & Canada)"
         )
         expected_2 = PagerdutySchedule(
             description="",
             escalation_policies=[{"id": "ESC2", "name": "Escalation 2"}],
-            schedule_id="SCHED2",
-            schedule_name="Schedule 2",
+            id="SCHED2",
+            name="Schedule 2",
             time_zone="Eastern Time (US & Canada)"
         )
         self.mock_http.side_effect = [json.dumps(response)]
@@ -174,20 +174,20 @@ class TestGetPagerdutySchedules(asynctest.TestCase):
     def test_schedule_equality(self):
         sched_1 = PagerdutySchedule(
             description="sched_1",
-            schedule_name="Schedule 1",
+            name="Schedule 1",
         )
         sched_2 = PagerdutySchedule(
             description="sched_2",
-            schedule_name="Schedule 2",
+            name="Schedule 2",
         )
         self.assertNotEqual(sched_1, sched_2)
         sched_dict = {
             "description": "sched_1",
         }
-        sched_2.load_schedule(sched_dict)
+        sched_2.load(sched_dict)
         self.assertNotEqual(sched_1, sched_2)
         sched_dict = {
             "name": "Schedule 1",
         }
-        sched_2.load_schedule(sched_dict)
+        sched_2.load(sched_dict)
         self.assertEqual(sched_1, sched_2)

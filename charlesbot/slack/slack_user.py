@@ -1,10 +1,10 @@
-import logging
 import json
 import asyncio
 from charlesbot.util.slack import slack_rtm_api_call
+from charlesbot.base_object import BaseObject
 
 
-class SlackUser(object):
+class SlackUser(BaseObject):
 
     main_properties = ['id',
                        'name',
@@ -21,11 +21,10 @@ class SlackUser(object):
                           'email',
                           'image_24']
 
+    properties = main_properties + profile_properties
+
     def __init__(self, **kwargs):
-        self.log = logging.getLogger(__name__)
-        merged_properties = self.main_properties + self.profile_properties
-        for prop in merged_properties:
-            setattr(self, prop, kwargs.get(prop, ""))
+        super().__init__(**kwargs)
 
     @asyncio.coroutine
     def retrieve_slack_user_info(self, slack_client, user_id):
@@ -44,23 +43,3 @@ class SlackUser(object):
         for prop in self.profile_properties:
             default = getattr(self, prop)
             setattr(self, prop, user_dict.get('user', {}).get('profile', {}).get(prop, default))  # NOQA
-
-    def __str__(self):
-        return_dict = {}
-        merged_properties = self.main_properties + self.profile_properties
-        for prop in merged_properties:
-            return_dict.update({prop: getattr(self, prop)})
-        return json.dumps(return_dict)
-
-    def __eq__(self, other):
-        merged_properties = self.main_properties + self.profile_properties
-        for prop in merged_properties:
-            if not getattr(self, prop) == getattr(other, prop):
-                self.log.debug("Property %s is different" % prop)
-                self.log.debug("%s != %s" % (getattr(self, prop),
-                                             getattr(other, prop)))
-                return False
-        return True
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
