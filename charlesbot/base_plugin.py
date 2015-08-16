@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from charlesbot.slack.slack_message import SlackMessage
 import asyncio
 import logging
 
@@ -22,7 +23,16 @@ class BasePlugin(metaclass=ABCMeta):
     def consume(self):
         while self.is_running():
             value = yield from self._q.get()
+            if self.is_bot_message(value):
+                continue
             yield from self.process_message(value)
+
+    def is_bot_message(self, message):
+        if not type(message) is SlackMessage:
+            return False
+        if message.subtype == "bot_message":
+            return True
+        return False
 
     def get_plugin_name(self):
         return self._plugin_name
