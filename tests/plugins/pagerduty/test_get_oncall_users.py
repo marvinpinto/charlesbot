@@ -188,26 +188,26 @@ class TestGetOncallUsers(asynctest.TestCase):
                 "color": "green",
             }
         }
-        user_1.load_entry(sched_dict)
+        user_1.load(sched_dict)
         self.assertNotEqual(user_1, user_2)
         sched_dict = {
             "user": {
                 "email": "user2@examples.org",
             }
         }
-        user_1.load_entry(sched_dict)
+        user_1.load(sched_dict)
         self.assertNotEqual(user_1, user_2)
         sched_dict = {
             "user": {
                 "id": "PD222",
             }
         }
-        user_1.load_entry(sched_dict)
+        user_1.load(sched_dict)
         self.assertNotEqual(user_1, user_2)
         sched_dict = {
             "user": {
                 "name": "User Two",
             }
         }
-        user_1.load_entry(sched_dict)
+        user_1.load(sched_dict)
         self.assertEqual(user_1, user_2)

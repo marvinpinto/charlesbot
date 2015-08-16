@@ -52,7 +52,7 @@ def get_oncall_users(token, subdomain, schedules, since, until):
             json_str = json.loads(response)
             for entry in json_str['entries']:
                 pd_user = PagerdutyUser()
-                pd_user.load_entry(entry)
+                pd_user.load(entry)
                 schedule.oncall_users.append(pd_user)
         except (ValueError, KeyError, TypeError):
             log.error("Error parsing json response from pagerduty")
