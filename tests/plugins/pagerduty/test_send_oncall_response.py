@@ -21,7 +21,7 @@ class TestSendOncallResponse(asynctest.TestCase):
         self.subdomain = "subdomain"
 
     def test_one_schedule_no_oncall_people(self):
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[])
         attachment = SlackAttachment(
             color="#36a64f",
@@ -44,7 +44,7 @@ class TestSendOncallResponse(asynctest.TestCase):
     def test_one_schedule_one_oncall_person(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
                                  full_name="User 1")
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[pd_user1])
         attachment = SlackAttachment(
             color="#36a64f",
@@ -69,7 +69,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                                  full_name="User 1")
         pd_user2 = PagerdutyUser(user_id="PDUSER2",
                                  full_name="User 2")
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[pd_user1, pd_user2])
         attachment = SlackAttachment(
             color="#36a64f",
@@ -90,9 +90,9 @@ class TestSendOncallResponse(asynctest.TestCase):
         self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
 
     def test_two_schedules_no_oncall_people(self):
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[])
-        pd_sched2 = PagerdutySchedule(schedule_name="Schedule2",
+        pd_sched2 = PagerdutySchedule(name="Schedule2",
                                       oncall_users=[])
         attachment = SlackAttachment(
             color="#36a64f",
@@ -115,9 +115,9 @@ class TestSendOncallResponse(asynctest.TestCase):
     def test_two_schedules_one_oncall_person(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
                                  full_name="User 1")
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[pd_user1])
-        pd_sched2 = PagerdutySchedule(schedule_name="Schedule2",
+        pd_sched2 = PagerdutySchedule(name="Schedule2",
                                       oncall_users=[])
         attachment = SlackAttachment(
             color="#36a64f",
@@ -140,9 +140,9 @@ class TestSendOncallResponse(asynctest.TestCase):
     def test_two_schedules_one_oncall_person_per_schedule(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
                                  full_name="User 1")
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[pd_user1])
-        pd_sched2 = PagerdutySchedule(schedule_name="Schedule2",
+        pd_sched2 = PagerdutySchedule(name="Schedule2",
                                       oncall_users=[pd_user1])
         attachment = SlackAttachment(
             color="#36a64f",
@@ -167,9 +167,9 @@ class TestSendOncallResponse(asynctest.TestCase):
                                  full_name="User 1")
         pd_user2 = PagerdutyUser(user_id="PDUSER2",
                                  full_name="User 2")
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[pd_user1, pd_user2])
-        pd_sched2 = PagerdutySchedule(schedule_name="Schedule2",
+        pd_sched2 = PagerdutySchedule(name="Schedule2",
                                       oncall_users=[pd_user1, pd_user2])
         attachment = SlackAttachment(
             color="#36a64f",
@@ -196,9 +196,9 @@ class TestSendOncallResponse(asynctest.TestCase):
                                  full_name="User 2")
         pd_user3 = PagerdutyUser(user_id="PDUSER3",
                                  full_name="User 3")
-        pd_sched1 = PagerdutySchedule(schedule_name="Schedule1",
+        pd_sched1 = PagerdutySchedule(name="Schedule1",
                                       oncall_users=[pd_user1])
-        pd_sched2 = PagerdutySchedule(schedule_name="Schedule2",
+        pd_sched2 = PagerdutySchedule(name="Schedule2",
                                       oncall_users=[pd_user1, pd_user2, pd_user3])  # NOQA
         attachment = SlackAttachment(
             color="#36a64f",

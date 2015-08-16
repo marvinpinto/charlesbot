@@ -21,7 +21,7 @@ def get_pagerduty_schedules(token, subdomain):
         json_str = json.loads(response)
         for schedule in json_str['schedules']:
             pd_schedule = PagerdutySchedule()
-            pd_schedule.load_schedule(schedule)
+            pd_schedule.load(schedule)
             schedules.append(pd_schedule)
     except (ValueError, KeyError, TypeError):
         log.error("Error parsing json response from pagerduty")
@@ -35,7 +35,7 @@ def get_oncall_users(token, subdomain, schedules, since, until):
 
         # Move on to the next schedule if we don't have a schedule ID for
         # whatever reason
-        if not schedule.schedule_id:
+        if not schedule.id:
             log.error("Could not find a schedule ID for: %s" % schedule)
             continue
 
@@ -45,7 +45,7 @@ def get_oncall_users(token, subdomain, schedules, since, until):
         }
         response = yield from http_get_auth_request(
             auth_string="token=%s" % token,
-            url="https://%s.pagerduty.com/api/v1/schedules/%s/entries" % (subdomain, schedule.schedule_id),  # NOQA
+            url="https://%s.pagerduty.com/api/v1/schedules/%s/entries" % (subdomain, schedule.id),  # NOQA
             payload=payload
         )
         try:
@@ -66,7 +66,7 @@ def send_oncall_response(slack_client, schedules, channel_id):
         oncall_people = ", ".join(sorted(user.full_name for user in schedule.oncall_users))  # NOQA
         if not oncall_people:
             oncall_people = "could not determine who's on call :disappointed:"
-        message.append("*%s* - %s" % (schedule.schedule_name, oncall_people))
+        message.append("*%s* - %s" % (schedule.name, oncall_people))
     final_msg = "\n".join(message)
     attachment = SlackAttachment(color="#36a64f",
                                  fallback=final_msg,

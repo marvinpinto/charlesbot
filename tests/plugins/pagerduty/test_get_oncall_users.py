@@ -23,7 +23,7 @@ class TestGetOncallUsers(asynctest.TestCase):
 
     @asyncio.coroutine
     def bogus_response_helper(self, output):
-        self.pd_sched.schedule_id = "001"
+        self.pd_sched.id = "001"
         self.mock_http.side_effect = [json.dumps(output)]
         yield from self.get_users(self.token,
                                   self.subdomain,
@@ -49,7 +49,7 @@ class TestGetOncallUsers(asynctest.TestCase):
         self.assertEqual(self.mock_http.mock_calls, [])
 
     def test_http_args(self):
-        self.pd_sched.schedule_id = "001"
+        self.pd_sched.id = "001"
         yield from self.get_users(self.token,
                                   self.subdomain,
                                   [self.pd_sched],
@@ -79,7 +79,7 @@ class TestGetOncallUsers(asynctest.TestCase):
         yield from self.bogus_response_helper("[{]")
 
     def test_color_key_not_present(self):
-        self.pd_sched.schedule_id = "002"
+        self.pd_sched.id = "002"
         output = {
             "entries": [
                 {
@@ -105,8 +105,8 @@ class TestGetOncallUsers(asynctest.TestCase):
         self.assertTrue(pd_user in self.pd_sched.oncall_users)
 
     def test_multiple_schedules(self):
-        pd_sched1 = PagerdutySchedule(schedule_id="001")
-        pd_sched2 = PagerdutySchedule(schedule_id="002")
+        pd_sched1 = PagerdutySchedule(id="001")
+        pd_sched2 = PagerdutySchedule(id="002")
         output1 = {
             "entries": [
                 {
