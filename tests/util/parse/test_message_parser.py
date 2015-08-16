@@ -1,6 +1,5 @@
 import unittest
 from charlesbot.util.parse import parse_msg_with_prefix
-from charlesbot.util.parse import filter_message_types
 
 
 class TestMessageParser(unittest.TestCase):
@@ -54,45 +53,3 @@ class TestMessageParser(unittest.TestCase):
         msg = "!allhi, there!"
         retval = parse_msg_with_prefix("!all", msg)
         self.assertEqual(None, retval)
-
-    def test_filter_okay(self):
-        msg = {"type": "group_joined", "channel": "fun"}
-        types = ['group_joined', 'channel_joined']
-        fields = ['channel']
-        self.assertEqual(filter_message_types(msg, types, fields), True)
-
-    def test_filter_type_not_present(self):
-        msg = {"types": "group_joined", "channel": "fun"}
-        types = ['group_joined', 'channel_joined']
-        fields = ['channel']
-        self.assertEqual(filter_message_types(msg, types, fields), False)
-
-    def test_filter_type_not_in_types(self):
-        msg = {"type": "group_joined", "channel": "fun"}
-        types = ['group_joining', 'channel_joined']
-        fields = ['channel']
-        self.assertEqual(filter_message_types(msg, types, fields), False)
-
-    def test_filter_field_not_present(self):
-        msg = {"type": "group_joined", "channel": "fun"}
-        types = ['group_joined', 'channel_joined']
-        fields = ['channels']
-        self.assertEqual(filter_message_types(msg, types, fields), False)
-
-    def test_filter_too_many_fields(self):
-        msg = {"type": "group_joined", "channel": "fun"}
-        types = ['group_joined', 'channel_joined']
-        fields = ['channel', 'type', 'channels']
-        self.assertEqual(filter_message_types(msg, types, fields), False)
-
-    def test_filter_exact_amount_of_fields(self):
-        msg = {"type": "group_joined", "channel": "fun"}
-        types = ['group_joined', 'channel_joined']
-        fields = ['channel', 'type']
-        self.assertEqual(filter_message_types(msg, types, fields), True)
-
-    def test_filter_no_fields(self):
-        msg = {"type": "group_joined", "channel": "fun"}
-        types = ['group_joined', 'channel_joined']
-        fields = []
-        self.assertEqual(filter_message_types(msg, types, fields), True)
