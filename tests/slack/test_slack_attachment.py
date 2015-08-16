@@ -34,7 +34,8 @@ class TestSlackAttachment(unittest.TestCase):
                                   fallback="fallback msg green",
                                   text="real message green")
         dummy_json = json.loads(str(attach1))
-        self.assertEqual(len(dummy_json.keys()), 6)
-        self.assertEqual(dummy_json.get('color'), "green")
-        self.assertEqual(dummy_json.get('fallback'), "fallback msg green")
-        self.assertEqual(dummy_json.get('text'), "real message green")
+        self.assertEqual(len(dummy_json), 1)
+        self.assertEqual(len(dummy_json[0].keys()), 6)
+        self.assertEqual(dummy_json[0].get('color'), "green")
+        self.assertEqual(dummy_json[0].get('fallback'), "fallback msg green")
+        self.assertEqual(dummy_json[0].get('text'), "real message green")
