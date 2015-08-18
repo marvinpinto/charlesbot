@@ -9,7 +9,10 @@ class SlackAttachment(BaseObject):
                   'text',
                   'mrkdwn_in',
                   'author_name',
-                  'author_icon']
+                  'author_icon',
+                  'thumb_url',
+                  'title',
+                  'title_link']
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
