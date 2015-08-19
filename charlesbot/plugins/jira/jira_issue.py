@@ -19,7 +19,7 @@ class JiraIssue(BaseObject):
         self.assignee_gravatar = self.default_assignee_gravatar
         self.status = self.get_status_color(1)
 
-    def load(self, jira_dict):
+    def load(self, jira_dict):  # NOQA C901 'JiraIssue.load' is too complex (14)
         if not jira_dict:
             return
 
