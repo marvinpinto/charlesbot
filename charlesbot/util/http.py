@@ -23,3 +23,19 @@ def http_get_auth_request(auth_string,
         response.close()
         return ""
     return (yield from response.text())
+
+
+@asyncio.coroutine
+def http_get_request(url, content_type="application/json"):
+    headers = {
+        'Content-type': content_type,
+    }
+    response = yield from aiohttp.get(url, headers=headers)
+    if not response.status == 200:
+        text = yield from response.text()
+        log.error("Response status code was %s" % str(response.status))
+        log.error(response.headers)
+        log.error(text)
+        response.close()
+        return ""
+    return (yield from response.text())

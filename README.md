@@ -30,6 +30,12 @@ Send a `!wall` broadcast message to all channels Charles has been invited to!
 
 ![oncall][10]
 
+#### JIRA ticket info
+
+Enter something that looks like a Jira ticket and voila!
+
+![jira][11]
+
 
 
 ## Cool! So how do I run this thing??
@@ -161,3 +167,4 @@ See the [LICENSE](LICENSE.txt) file for license rights and limitations (MIT).
 [8]: /config.ini.example
 [9]: https://www.docker.com
 [10]: /images/oncall.png?raw=true
+[11]: /images/jira.png?raw=true
