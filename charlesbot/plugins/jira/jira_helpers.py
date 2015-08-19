@@ -1,4 +1,5 @@
 import asyncio
+import re
 from charlesbot.util.slack import slack_rtm_api_call
 from charlesbot.util.http import http_get_request
 from charlesbot.slack.slack_attachment import SlackAttachment
@@ -47,3 +48,10 @@ def send_jira_issue_response(slack_client, channel, jira_base_url, jira_issue):
         username="JIRA",
         icon_url="https://slack.global.ssl.fastly.net/12d4/img/services/jira_48.png"  # NOQA
     )
+
+
+def extract_jira_ticket_numbers(msg):
+    regex_str = "\\b([A-Z]+-\d+)\\b"
+    p = re.compile(regex_str, re.MULTILINE)
+    m = p.findall(msg)
+    return m
