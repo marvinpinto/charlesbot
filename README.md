@@ -87,6 +87,7 @@ docker run \
   -it \
   -e "CHARLESBOT_SETTINGS_FILE=/config.ini" \
   -v /path/to/your/config.ini:/config.ini \
+  -v /etc/localtime:/etc/localtime:ro \
   quay.io/marvin/charlesbot
 ```
 
