@@ -17,6 +17,7 @@ def http_get_auth_request(auth_string,
     response = yield from aiohttp.get(url, headers=headers, params=payload)
     if not response.status == 200:
         text = yield from response.text()
+        log.error("URL: %s" % url)
         log.error("Response status code was %s" % str(response.status))
         log.error(response.headers)
         log.error(text)
@@ -33,6 +34,7 @@ def http_get_request(url, content_type="application/json"):
     response = yield from aiohttp.get(url, headers=headers)
     if not response.status == 200:
         text = yield from response.text()
+        log.error("URL: %s" % url)
         log.error("Response status code was %s" % str(response.status))
         log.error(response.headers)
         log.error(text)
