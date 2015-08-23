@@ -16,7 +16,7 @@ class TestHelpPlugin(asynctest.TestCase):
         self.initialize_help_plugin()
 
     def initialize_help_plugin(self):
-        self.hp = Help(self.slack_client)
+        self.hp = Help()
         self.hp.send_help_message = MagicMock()
 
     @asynctest.ignore_loop
