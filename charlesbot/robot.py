@@ -1,5 +1,3 @@
-from charlesbot.util.config import get_config_file_name
-from charlesbot.util.config import read_config
 from charlesbot.util.plugins import initialize_plugins
 from slackclient import SlackClient
 import logging
@@ -8,15 +6,16 @@ import sys
 import signal
 import traceback
 import functools
+from charlesbot.config import configuration
 
 
 class Robot(object):
 
     def __init__(self):
-        self.config = read_config(get_config_file_name())
         self.log = logging.getLogger(__name__)
-        self.token = self.config.get('main', 'slackbot_token')
-        self.enabled_plugins = self.config.get('main', 'enabled_plugins')
+        config_dict = configuration.get()
+        self.token = config_dict['main']['slackbot_token']
+        self.enabled_plugins = config_dict['main']['enabled_plugins']
         self.sc = None
         self.is_running = True
 

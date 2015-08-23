@@ -12,7 +12,7 @@ class TestRobotUtils(unittest.TestCase):
         with patch('charlesbot.util.plugins.get_plugin_class') as mock1:
             from charlesbot.util.plugins import initialize_plugins
             mock1.side_effect = self.mock_get_plugin_class
-            input_list = "oneplugin"
+            input_list = ["oneplugin"]
             expected_output = ["oneplugin"]
             fake_client = SlackClient("faketoken")
             self.assertCountEqual(
@@ -24,7 +24,7 @@ class TestRobotUtils(unittest.TestCase):
         with patch('charlesbot.util.plugins.get_plugin_class') as mock1:
             from charlesbot.util.plugins import initialize_plugins
             mock1.side_effect = self.mock_get_plugin_class
-            input_list = "one,two"
+            input_list = ["one", "two"]
             expected_output = ['one', 'two']
             fake_client = SlackClient("faketoken")
             self.assertCountEqual(
@@ -36,7 +36,7 @@ class TestRobotUtils(unittest.TestCase):
         with patch('charlesbot.util.plugins.get_plugin_class') as mock1:
             from charlesbot.util.plugins import initialize_plugins
             mock1.side_effect = self.mock_get_plugin_class
-            input_list = ""
+            input_list = []
             expected_output = []
             fake_client = SlackClient("faketoken")
             self.assertEqual(

@@ -1,11 +1,7 @@
 import asyncio
 from charlesbot.base_plugin import BasePlugin
 from charlesbot.slack.slack_message import SlackMessage
-
-from charlesbot.util.config import (
-    get_config_file_name,
-    read_config
-)
+from charlesbot.config import configuration
 
 from charlesbot.plugins.jira.jira_helpers import (
     get_jira_issue_info,
@@ -21,8 +17,8 @@ class Jira(BasePlugin):
         self.load_config()
 
     def load_config(self):
-        config = read_config(get_config_file_name())
-        self.base_url = config.get('jira', 'base_url')
+        config_dict = configuration.get()
+        self.base_url = config_dict['jira']['base_url']
 
     @asyncio.coroutine
     def process_message(self, message):
