@@ -3,11 +3,7 @@ from datetime import datetime
 from charlesbot.base_plugin import BasePlugin
 from charlesbot.util.parse import does_msg_contain_prefix
 from charlesbot.slack.slack_message import SlackMessage
-
-from charlesbot.util.config import (
-    get_config_file_name,
-    read_config
-)
+from charlesbot.config import configuration
 
 from charlesbot.plugins.pagerduty.pagerduty_helpers import (
     get_oncall_users,
@@ -23,9 +19,9 @@ class Pagerduty(BasePlugin):
         self.load_config()
 
     def load_config(self):
-        config = read_config(get_config_file_name())
-        self.token = config.get('pagerduty', 'token')
-        self.subdomain = config.get('pagerduty', 'subdomain')
+        config_dict = configuration.get()
+        self.token = config_dict['pagerduty']['token']
+        self.subdomain = config_dict['pagerduty']['subdomain']
 
     @asyncio.coroutine
     def process_message(self, message):

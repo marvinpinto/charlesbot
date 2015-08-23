@@ -40,7 +40,7 @@ Enter something that looks like a Jira ticket and voila!
 
 ## Cool! So how do I run this thing??
 
-First off, create a `config.ini` file similar to [config.ini.example][8].
+First off, create a `config.yaml` file similar to [config.yaml.example][8].
 You'll need a [Slack Bot Token][2], if you don't already have one.
 
 You have two options to run CharlesBOT:
@@ -61,7 +61,7 @@ option for you to get going!
 #### Installing from PyPI
 
 ```bash
-export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.ini
+export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.yaml
 pyvenv-3.4 charlesbot-env
 charlesbot-env/bin/pip install git+https://github.com/slackhq/python-slackclient.git@ba71b24603f63e54e704d0481812efcd9f7b8c14
 charlesbot-env/bin/pip install charlesbot
@@ -75,7 +75,7 @@ when they publish a newer version of `slackclient`.
 #### Running CharlesBOT
 
 ```bash
-export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.ini
+export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.yaml
 charlesbot-env/bin/charlesbot
 ```
 
@@ -85,8 +85,8 @@ charlesbot-env/bin/charlesbot
 docker run \
   --rm \
   -it \
-  -e "CHARLESBOT_SETTINGS_FILE=/config.ini" \
-  -v /path/to/your/config.ini:/config.ini \
+  -e "CHARLESBOT_SETTINGS_FILE=/config.yaml" \
+  -v /path/to/your/config.yaml:/config.yaml \
   -v /etc/localtime:/etc/localtime:ro \
   quay.io/marvin/charlesbot
 ```
@@ -165,7 +165,7 @@ See the [LICENSE](LICENSE.txt) file for license rights and limitations (MIT).
 [5]: /images/help.png?raw=true
 [6]: http://i.giphy.com/5xtDarmwsuR9sDRObyU.gif
 [7]: https://github.com/slackhq/python-slackclient
-[8]: /config.ini.example
+[8]: /config.yaml.example
 [9]: https://www.docker.com
 [10]: /images/oncall.png?raw=true
 [11]: /images/jira.png?raw=true
