@@ -8,8 +8,8 @@ from charlesbot.slack.slack_message import SlackMessage
 class TestBasePlugin(asynctest.TestCase):
 
     class DummyPlugin(BasePlugin):
-        def __init__(myself, slack_client):
-            super().__init__(slack_client, "Dummy")
+        def __init__(myself):
+            super().__init__("Dummy")
             myself.call_counter = 0
 
         @asyncio.coroutine
@@ -17,14 +17,7 @@ class TestBasePlugin(asynctest.TestCase):
             myself.call_counter += 1
 
     def setUp(self):
-        self.slack_client = MagicMock()
-        self.initialize_dummy_plugin()
-
-    def tearDown(self):
-        self.initialize_dummy_plugin()
-
-    def initialize_dummy_plugin(self):
-        self.dc = TestBasePlugin.DummyPlugin(self.slack_client)
+        self.dc = TestBasePlugin.DummyPlugin()
         self.dc.set_running(False)
 
     @asynctest.ignore_loop

@@ -1,15 +1,16 @@
 from abc import ABCMeta, abstractmethod
 from charlesbot.slack.slack_message import SlackMessage
+from charlesbot.slack.slack_connection import SlackConnection
 import asyncio
 import logging
 
 
 class BasePlugin(metaclass=ABCMeta):
 
-    def __init__(self, slack_client, plugin_name):
+    def __init__(self, plugin_name):
         self.set_running(True)
         self.log = logging.getLogger(__name__)
-        self.sc = slack_client
+        self.slack = SlackConnection()
         self._plugin_name = plugin_name
         self.log.info("Initializing the %s plugin" % plugin_name)
         self._q = asyncio.Queue()
