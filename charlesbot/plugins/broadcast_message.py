@@ -89,7 +89,7 @@ class BroadcastMessage(BasePlugin):
         if not does_msg_contain_prefix("!wall", message.text):
             return
         parsed_message = parse_msg_with_prefix("!wall", message.text)
-        if not parsed_message:
+        if not parsed_message:  # pragma: no cover
             return
         slack_user = SlackUser()
         yield from slack_user.retrieve_slack_user_info(self.sc, message.user)

@@ -18,7 +18,7 @@ class Pagerduty(BasePlugin):
         super().__init__(slack_client, "Pagerduty")
         self.load_config()
 
-    def load_config(self):
+    def load_config(self):  # pragma: no cover
         config_dict = configuration.get()
         self.token = config_dict['pagerduty']['token']
         self.subdomain = config_dict['pagerduty']['subdomain']

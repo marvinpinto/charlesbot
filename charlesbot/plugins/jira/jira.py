@@ -16,7 +16,7 @@ class Jira(BasePlugin):
         super().__init__(slack_client, "Jira")
         self.load_config()
 
-    def load_config(self):
+    def load_config(self):  # pragma: no cover
         config_dict = configuration.get()
         self.base_url = config_dict['jira']['base_url']
 
