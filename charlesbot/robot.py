@@ -1,4 +1,3 @@
-from charlesbot.util.plugins import initialize_plugins
 from slackclient import SlackClient
 import logging
 import asyncio
@@ -6,6 +5,7 @@ import sys
 import signal
 import traceback
 import functools
+import importlib
 from charlesbot.config import configuration
 
 
@@ -43,7 +43,6 @@ class Robot(object):
         yield from asyncio.sleep(0.5)
 
     def get_message_type(self, msg):
-        import importlib
         obj_list = [
             "charlesbot.slack.slack_channel_joined.SlackChannelJoined",
             "charlesbot.slack.slack_channel_left.SlackChannelLeft",
@@ -59,6 +58,17 @@ class Robot(object):
             if getattr(return_obj, 'is_compatible')(msg):
                 return_obj.load(msg)
                 return return_obj
+
+    def initialize_plugins(self):
+        return_list = []
+        if not self.enabled_plugins:
+            return return_list
+        for x in self.enabled_plugins:
+            module_name, class_name = x.rsplit(".", 1)
+            obj_class = getattr(importlib.import_module(module_name), class_name)  # NOQA
+            return_obj = obj_class(self.sc)
+            return_list.append(return_obj)
+        return return_list
 
     @asyncio.coroutine
     def queue_message(self, message, plugin):
@@ -86,7 +96,7 @@ class Robot(object):
             self.log.error("Error conecting to Slack - possible token issue?")
             sys.exit(1)
         loop = asyncio.get_event_loop()
-        self.plugin_list = initialize_plugins(self.sc, self.enabled_plugins)
+        self.plugin_list = self.initialize_plugins()
         loop.create_task(self.produce())
         loop.add_signal_handler(
             signal.SIGINT,
