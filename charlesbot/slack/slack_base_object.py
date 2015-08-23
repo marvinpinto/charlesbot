@@ -12,5 +12,8 @@ class SlackBaseObject(BaseObject, metaclass=ABCMeta):
         pass
 
     def is_compatible(self, object_dict):
-        my_type = object_dict.get('type', "")
-        return my_type == self.compatibility_key
+        try:
+            my_type = object_dict.get('type', "")
+            return my_type == self.compatibility_key
+        except AttributeError:
+            return False
