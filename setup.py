@@ -43,6 +43,7 @@ setup(
         "websocket-client",
         "cchardet",
         "aiohttp",
+        "PyYAML",
     ],
 
     test_suite='nose.collector'
