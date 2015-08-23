@@ -1,8 +1,10 @@
 main:
   slackbot_token: 'xoxb-...'
   enabled_plugins:
-    - 'BroadcastMessage'
-    - 'Help'
+    - 'charlesbot.plugins.broadcast_message.BroadcastMessage'
+    - 'charlesbot.plugins.help_plugin.Help'
+    - 'charlesbot.plugins.pagerduty.pagerduty.Pagerduty'
+    - 'charlesbot.plugins.jira.jira.Jira'
 
 pagerduty:
   token: 'E7px6VVr3PVHZPJq51oa'

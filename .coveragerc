@@ -2,8 +2,8 @@
 omit =
     */python?.?/*
     */site-packages/nose/*
+    charlesbot/__main__.py
 exclude_lines =
     pragma: no cover
-    if __name__ == .__main__.:
     pass
     rtm_send_message
