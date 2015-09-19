@@ -52,7 +52,7 @@ class TestSlackUser(asynctest.TestCase):
         self.assertEqual(user_json.get('has_2fa'), True)
         self.assertEqual(user_json.get('is_owner'), "")
 
-    def test_empty_rtm_response(self):
+    def test_empty_slack_response(self):
         self.su.name = "suser"
         self.mock_api_call.side_effect = ["{}"]
         yield from self.su.retrieve_slack_user_info(self.slack_connection,
