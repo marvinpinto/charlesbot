@@ -1,72 +1,50 @@
-from slackclient import SlackClient
 import logging
 import asyncio
-import sys
 import signal
-import traceback
 import functools
 import importlib
 from charlesbot.config import configuration
+from charlesbot.slack.slack_connection import SlackConnection
 
 
 class Robot(object):
 
     def __init__(self):  # pragma: no cover
         self.log = logging.getLogger(__name__)
+        self.initialize_robot()
+
+    def initialize_robot(self):  # pragma: no cover
         config_dict = configuration.get()
         self.token = config_dict['main']['slackbot_token']
         self.enabled_plugins = config_dict['main']['enabled_plugins']
-        self.sc = None
-        self.is_running = True
 
-    def connect(self):  # pragma: no cover
-        """Convenience method that creates Server instance"""
-        self.sc = SlackClient(self.token)
-        return self.sc.rtm_connect()
+    def is_running(self):
+        return self._is_running
+
+    def set_running(self, running):
+        self._is_running = running
 
     @asyncio.coroutine
-    def produce(self):  # pragma: no cover
-        while self.is_running:
+    def produce(self):
+        while self.is_running():
             yield from self.route_message_to_plugin()
 
     @asyncio.coroutine
-    def route_message_to_plugin(self):  # pragma: no cover
-        try:
-            messages = self.sc.rtm_read()
-            for msg in messages:
-                message_object = self.get_message_type(msg)
-                for plug in self.plugin_list:
-                    yield from self.queue_message(message_object, plug)
-        except BrokenPipeError as b:
-            self.log.error("Error reading from slack socket: %s" % b)
-            self.log.debug(traceback.format_exc())
+    def route_message_to_plugin(self):
+        messages = yield from self.slack.get_stream_messages()
+        for msg in messages:
+            for plugin in self.plugin_list:
+                yield from self.queue_message(msg, plugin)
         yield from asyncio.sleep(0.5)
 
-    def get_message_type(self, msg):  # pragma: no cover
-        obj_list = [
-            "charlesbot.slack.slack_channel_joined.SlackChannelJoined",
-            "charlesbot.slack.slack_channel_left.SlackChannelLeft",
-            "charlesbot.slack.slack_group_joined.SlackGroupJoined",
-            "charlesbot.slack.slack_group_left.SlackGroupLeft",
-            "charlesbot.slack.slack_message.SlackMessage",
-        ]
-        for obj in obj_list:
-            module_name, class_name = obj.rsplit(".", 1)
-            obj_class = getattr(importlib.import_module(module_name), class_name)  # NOQA
-            return_obj = obj_class()
-
-            if getattr(return_obj, 'is_compatible')(msg):
-                return_obj.load(msg)
-                return return_obj
-
-    def initialize_plugins(self):  # pragma: no cover
+    def initialize_plugins(self):
         return_list = []
         if not self.enabled_plugins:
             return return_list
         for x in self.enabled_plugins:
             module_name, class_name = x.rsplit(".", 1)
             obj_class = getattr(importlib.import_module(module_name), class_name)  # NOQA
-            return_obj = obj_class(self.sc)
+            return_obj = obj_class()
             return_list.append(return_obj)
         return return_list
 
@@ -75,10 +53,10 @@ class Robot(object):
         if message:
             yield from plugin.queue_message(message)
 
-    def exit_cleanly(self):  # pragma: no cover
+    def exit_cleanly(self):
         loop = asyncio.get_event_loop()
         self.log.info("Shutting down charlesbot")
-        self.is_running = False
+        self.set_running(False)
 
         for plug in self.plugin_list:
             self.log.info("Shutting down plugin: %s" % plug.get_plugin_name())
@@ -89,9 +67,8 @@ class Robot(object):
         loop.stop()
 
     def start(self):  # pragma: no cover
-        if not self.connect():
-            self.log.error("Error conecting to Slack - possible token issue?")
-            sys.exit(1)
+        self.set_running(True)
+        self.slack = SlackConnection()
         loop = asyncio.get_event_loop()
         self.plugin_list = self.initialize_plugins()
         loop.create_task(self.produce())
