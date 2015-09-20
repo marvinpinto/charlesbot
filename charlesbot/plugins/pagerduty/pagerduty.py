@@ -23,6 +23,9 @@ class Pagerduty(BasePlugin):
         self.token = config_dict['pagerduty']['token']
         self.subdomain = config_dict['pagerduty']['subdomain']
 
+    def get_help_message(self):  # pragma: no cover
+        return "!oncall - Find out who's on-call right now"
+
     @asyncio.coroutine
     def process_message(self, message):
         if not type(message) is SlackMessage:
