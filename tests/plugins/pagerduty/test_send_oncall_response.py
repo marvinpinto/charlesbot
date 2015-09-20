@@ -1,7 +1,6 @@
 import asynctest
 from asynctest.mock import call
 from asynctest.mock import patch
-from asynctest.mock import MagicMock
 from charlesbot.plugins.pagerduty.pagerduty_schedule import PagerdutySchedule
 from charlesbot.plugins.pagerduty.pagerduty_user import PagerdutyUser
 from charlesbot.slack.slack_attachment import SlackAttachment
@@ -10,15 +9,21 @@ from charlesbot.slack.slack_attachment import SlackAttachment
 class TestSendOncallResponse(asynctest.TestCase):
 
     def setUp(self):
-        patcher = patch('charlesbot.plugins.pagerduty.pagerduty_helpers.slack_rtm_api_call')  # NOQA
-        self.addCleanup(patcher.stop)
-        self.mock_slack_rtm = patcher.start()
-        self.mock_slack_rtm.reset_mock()
+        patcher2 = patch('charlesbot.slack.slack_connection.SlackConnection.api_call')  # NOQA
+        self.addCleanup(patcher2.stop)
+        self.mock_api_call = patcher2.start()
+
+        from charlesbot.slack.slack_connection import SlackConnection
+        self.slack_connection = SlackConnection()
+
         from charlesbot.plugins.pagerduty.pagerduty_helpers import send_oncall_response  # NOQA
         self.send_response = send_oncall_response
-        self.mock_slackclient = MagicMock()
+
         self.token = "tokensekrit"
         self.subdomain = "subdomain"
+
+    def tearDown(self):
+        self.slack_connection._drop()
 
     def test_one_schedule_no_oncall_people(self):
         pd_sched1 = PagerdutySchedule(name="Schedule1",
@@ -29,17 +34,16 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - could not determine who's on call :disappointed:",  # NOQA
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])
 
     def test_one_schedule_one_oncall_person(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
@@ -52,17 +56,16 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - User 1",
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])
 
     def test_one_schedule_two_oncall_people(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
@@ -77,17 +80,16 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - User 1, User 2",
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])
 
     def test_two_schedules_no_oncall_people(self):
         pd_sched1 = PagerdutySchedule(name="Schedule1",
@@ -100,17 +102,16 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - could not determine who's on call :disappointed:\n*Schedule2* - could not determine who's on call :disappointed:",  # NOQA
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])
 
     def test_two_schedules_one_oncall_person(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
@@ -125,17 +126,16 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - User 1\n*Schedule2* - could not determine who's on call :disappointed:",  # NOQA
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])
 
     def test_two_schedules_one_oncall_person_per_schedule(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
@@ -150,17 +150,16 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - User 1\n*Schedule2* - User 1",
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])
 
     def test_two_schedules_two_oncall_people(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
@@ -177,17 +176,16 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - User 1, User 2\n*Schedule2* - User 1, User 2",
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])
 
     def test_two_schedules_three_oncall_people(self):
         pd_user1 = PagerdutyUser(user_id="PDUSER1",
@@ -206,14 +204,13 @@ class TestSendOncallResponse(asynctest.TestCase):
             text="*Schedule1* - User 1\n*Schedule2* - User 1, User 2, User 3",
             mrkdwn_in=["text"]
         )
-        expected = call(self.mock_slackclient,
-                        'chat.postMessage',
+        expected = call('chat.postMessage',
                         channel="chan1",
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
                         icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
-        yield from self.send_response(self.mock_slackclient,
+        yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected])
+        self.assertEqual(self.mock_api_call.mock_calls, [expected])

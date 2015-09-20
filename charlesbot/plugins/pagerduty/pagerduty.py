@@ -14,8 +14,8 @@ from charlesbot.plugins.pagerduty.pagerduty_helpers import (
 
 class Pagerduty(BasePlugin):
 
-    def __init__(self, slack_client):
-        super().__init__(slack_client, "Pagerduty")
+    def __init__(self):
+        super().__init__("Pagerduty")
         self.load_config()
 
     def load_config(self):  # pragma: no cover
@@ -40,4 +40,4 @@ class Pagerduty(BasePlugin):
                                     schedules,
                                     time_period,
                                     time_period)
-        yield from send_oncall_response(self.sc, schedules, channel_id)
+        yield from send_oncall_response(self.slack, schedules, channel_id)
