@@ -48,6 +48,16 @@ class Robot(object):
             return_list.append(return_obj)
         return return_list
 
+    def initialize_static_plugins(self):
+        self.initialize_help_plugin()
+
+    def initialize_help_plugin(self):
+        from charlesbot.plugins.help_plugin import Help
+        h = Help()
+        for plugin in self.plugin_list:
+            h.add_help_message(plugin.get_help_message())
+        self.plugin_list.append(h)
+
     @asyncio.coroutine
     def queue_message(self, message, plugin):
         if message:
@@ -71,6 +81,7 @@ class Robot(object):
         self.slack = SlackConnection()
         loop = asyncio.get_event_loop()
         self.plugin_list = self.initialize_plugins()
+        self.initialize_static_plugins()
         loop.create_task(self.produce())
         loop.add_signal_handler(
             signal.SIGINT,

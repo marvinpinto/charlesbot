@@ -20,6 +20,9 @@ class Jira(BasePlugin):
         config_dict = configuration.get()
         self.base_url = config_dict['jira']['base_url']
 
+    def get_help_message(self):  # pragma: no cover
+        return ""
+
     @asyncio.coroutine
     def process_message(self, message):
         if not type(message) is SlackMessage:

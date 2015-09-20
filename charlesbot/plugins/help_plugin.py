@@ -8,14 +8,20 @@ class Help(BasePlugin):
 
     def __init__(self):
         super().__init__("Help!")
+        self.initialize_help_message_list()
+
+    def initialize_help_message_list(self):
+        self.help_msg_list = []
+        self.help_msg_list.append("!help - This help message")
+        self.help_msg_list.sort()
+
+    def add_help_message(self, message):
+        if message:
+            self.help_msg_list.append(str(message))
+            self.help_msg_list.sort()
 
     def get_help_message(self):
-        msg = [
-            "!help - This help message",
-            "!wall <msg> - Broadcast a message to all channels I'm a part of",
-            "!oncall - Find out who's on-call right now",
-        ]
-        help_msg = "\n".join(msg)
+        help_msg = "\n".join(self.help_msg_list)
         return "```\n%s\n```" % help_msg
 
     @asyncio.coroutine

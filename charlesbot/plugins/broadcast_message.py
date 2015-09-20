@@ -32,6 +32,9 @@ class BroadcastMessage(BasePlugin):
         loop.create_task(self.seed_channel_membership())
         loop.create_task(self.seed_group_membership())
 
+    def get_help_message(self):  # pragma: no cover
+        return "!wall <msg> - Broadcast a message to all channels I'm a part of"  # NOQA
+
     def log_room_membership(self):
         self.log.info("Currently in: %s"
                       % ", ".join(sorted(self.room_membership.values())))
