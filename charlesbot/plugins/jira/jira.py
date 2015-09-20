@@ -12,8 +12,8 @@ from charlesbot.plugins.jira.jira_helpers import (
 
 class Jira(BasePlugin):
 
-    def __init__(self, slack_client):
-        super().__init__(slack_client, "Jira")
+    def __init__(self):
+        super().__init__("Jira")
         self.load_config()
 
     def load_config(self):  # pragma: no cover
@@ -33,7 +33,7 @@ class Jira(BasePlugin):
     def send_jira_issue_information(self, channel, jira_ticket):
         jira_issue = yield from get_jira_issue_info(self.base_url, jira_ticket)
         if jira_issue:
-            yield from send_jira_issue_response(self.sc,
+            yield from send_jira_issue_response(self.slack,
                                                 channel,
                                                 self.base_url,
                                                 jira_issue)

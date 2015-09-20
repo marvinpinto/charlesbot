@@ -1,6 +1,5 @@
 import asyncio
 import re
-from charlesbot.util.slack import slack_rtm_api_call
 from charlesbot.util.http import http_get_request
 from charlesbot.slack.slack_attachment import SlackAttachment
 import logging
@@ -28,7 +27,7 @@ def get_jira_issue_info(base_url, ticket_number):
 
 
 @asyncio.coroutine
-def send_jira_issue_response(slack_client, channel, jira_base_url, jira_issue):
+def send_jira_issue_response(slack_conn, channel, jira_base_url, jira_issue):
     title_text = "%s: %s" % (jira_issue.key, jira_issue.summary)
     title_url = "%s/browse/%s" % (jira_base_url, jira_issue.key)
     attachment = SlackAttachment(color=jira_issue.status,
@@ -39,8 +38,7 @@ def send_jira_issue_response(slack_client, channel, jira_base_url, jira_issue):
                                  title=title_text,
                                  title_link=title_url)
 
-    yield from slack_rtm_api_call(
-        slack_client,
+    yield from slack_conn.api_call(
         'chat.postMessage',
         channel=channel,
         attachments=attachment,
