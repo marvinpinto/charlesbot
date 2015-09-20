@@ -16,6 +16,9 @@ class TestBasePlugin(asynctest.TestCase):
         def process_message(myself, message):
             myself.call_counter += 1
 
+        def get_help_message(myself):
+            return "This is my help message"
+
     def setUp(self):
         self.dc = TestBasePlugin.DummyPlugin()
         self.dc.set_running(False)

@@ -10,12 +10,6 @@ class TestHelpPlugin(asynctest.TestCase):
 
     def setUp(self):
         self.slack_client = MagicMock()
-        self.initialize_help_plugin()
-
-    def tearDown(self):
-        self.initialize_help_plugin()
-
-    def initialize_help_plugin(self):
         self.hp = Help()
         self.hp.send_help_message = MagicMock()
 
@@ -72,3 +66,26 @@ class TestHelpPlugin(asynctest.TestCase):
         yield from self.hp.process_message(msg)
         expected = [call('C1'), call('C2')]
         self.hp.send_help_message.assert_has_calls(expected, any_order=True)
+
+    @asynctest.ignore_loop
+    def test_help_msg_falsy(self):
+        list_entry = "!help - This help message"
+        self.hp.add_help_message("")
+        self.assertEqual(len(self.hp.help_msg_list), 1)
+        self.assertTrue(list_entry in self.hp.help_msg_list)
+        self.hp.add_help_message([])
+        self.assertEqual(len(self.hp.help_msg_list), 1)
+        self.assertTrue(list_entry in self.hp.help_msg_list)
+        self.hp.add_help_message(0)
+        self.assertEqual(len(self.hp.help_msg_list), 1)
+        self.assertTrue(list_entry in self.hp.help_msg_list)
+
+    @asynctest.ignore_loop
+    def test_add_help_msg(self):
+        list_entry = "!help - This help message"
+        self.assertEqual(len(self.hp.help_msg_list), 1)
+        self.assertTrue(list_entry in self.hp.help_msg_list)
+        self.hp.add_help_message("hi there!")
+        self.assertEqual(len(self.hp.help_msg_list), 2)
+        self.assertTrue(list_entry in self.hp.help_msg_list)
+        self.assertTrue("hi there!" in self.hp.help_msg_list)

@@ -49,5 +49,9 @@ class BasePlugin(metaclass=ABCMeta):
         yield from self._q.put(message)
 
     @abstractmethod
+    def get_help_message(self):
+        pass
+
+    @abstractmethod
     def process_message(self, message):
         pass
