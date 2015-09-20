@@ -1,5 +1,4 @@
 import asynctest
-from asynctest.mock import MagicMock
 from asynctest.mock import CoroutineMock
 from asynctest.mock import patch
 from asynctest.mock import call
@@ -9,8 +8,6 @@ from charlesbot.slack.slack_message import SlackMessage
 class TestPagerdutyPlugin(asynctest.TestCase):
 
     def setUp(self):
-        self.slack_client = MagicMock()
-
         patcher1 = patch('charlesbot.plugins.pagerduty.pagerduty.get_pagerduty_schedules')  # NOQA
         self.addCleanup(patcher1.stop)
         self.mock_get_pagerduty_schedules = patcher1.start()
@@ -28,7 +25,7 @@ class TestPagerdutyPlugin(asynctest.TestCase):
         self.mock_load_config = patcher4.start()
 
         from charlesbot.plugins.pagerduty.pagerduty import Pagerduty
-        self.pd = Pagerduty(self.slack_client)
+        self.pd = Pagerduty()
         self.pd.token = "sekrittoken"
         self.pd.subdomain = "acmedomain"
         self.mock_schedule = CoroutineMock()

@@ -1,19 +1,24 @@
 import asynctest
 import json
-from asynctest.mock import patch
-from asynctest.mock import MagicMock
 from asynctest.mock import call
+from asynctest.mock import patch
 
 
 class TestSlackUser(asynctest.TestCase):
 
     def setUp(self):
-        patcher = patch('charlesbot.slack.slack_user.slack_rtm_api_call')
-        self.addCleanup(patcher.stop)
-        self.mock_slack_rtm = patcher.start()
+        patcher1 = patch('charlesbot.slack.slack_connection.SlackConnection.api_call')  # NOQA
+        self.addCleanup(patcher1.stop)
+        self.mock_api_call = patcher1.start()
+
+        from charlesbot.slack.slack_connection import SlackConnection
+        self.slack_connection = SlackConnection()
+
         from charlesbot.slack.slack_user import SlackUser
-        self.slack_client = MagicMock()
         self.su = SlackUser()
+
+    def tearDown(self):
+        self.slack_connection._drop()
 
     @asynctest.ignore_loop
     def test_user_equality(self):
@@ -47,13 +52,14 @@ class TestSlackUser(asynctest.TestCase):
         self.assertEqual(user_json.get('has_2fa'), True)
         self.assertEqual(user_json.get('is_owner'), "")
 
-    def test_empty_rtm_response(self):
+    def test_empty_slack_response(self):
         self.su.name = "suser"
-        self.mock_slack_rtm.side_effect = ["{}"]
-        yield from self.su.retrieve_slack_user_info(self.slack_client,
+        self.mock_api_call.side_effect = ["{}"]
+        yield from self.su.retrieve_slack_user_info(self.slack_connection,
                                                     "fake123")
-        expected_call = call(self.slack_client, "users.info", user="fake123")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected_call]),
+        expected_call = call("users.info", user="fake123")
+        self.assertEqual(self.mock_api_call.mock_calls,
+                         [expected_call]),
         self.assertEqual(self.su.name, "suser")
         self.assertEqual(self.su.last_name, "")
         self.assertEqual(self.su.is_bot, "")
@@ -67,11 +73,12 @@ class TestSlackUser(asynctest.TestCase):
                 "name": "bobby"
             }
         }
-        self.mock_slack_rtm.side_effect = [json.dumps(user_info)]
-        yield from self.su.retrieve_slack_user_info(self.slack_client,
+        self.mock_api_call.side_effect = [json.dumps(user_info)]
+        yield from self.su.retrieve_slack_user_info(self.slack_connection,
                                                     "fake123")
-        expected_call = call(self.slack_client, "users.info", user="fake123")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected_call]),
+        expected_call = call("users.info", user="fake123")
+        self.assertEqual(self.mock_api_call.mock_calls,
+                         [expected_call]),
         self.assertEqual(self.su.name, "bobby")
         self.assertEqual(self.su.id, "U023BECGF")
         self.assertEqual(self.su.last_name, "")
@@ -90,11 +97,12 @@ class TestSlackUser(asynctest.TestCase):
                 }
             }
         }
-        self.mock_slack_rtm.side_effect = [json.dumps(user_info)]
-        yield from self.su.retrieve_slack_user_info(self.slack_client,
+        self.mock_api_call.side_effect = [json.dumps(user_info)]
+        yield from self.su.retrieve_slack_user_info(self.slack_connection,
                                                     "fake123")
-        expected_call = call(self.slack_client, "users.info", user="fake123")
-        self.assertEqual(self.mock_slack_rtm.mock_calls, [expected_call]),
+        expected_call = call("users.info", user="fake123")
+        self.assertEqual(self.mock_api_call.mock_calls,
+                         [expected_call]),
         self.assertEqual(self.su.name, "bobby")
         self.assertEqual(self.su.id, "U023BECGF")
         self.assertEqual(self.su.real_name, "Bobby Tables")

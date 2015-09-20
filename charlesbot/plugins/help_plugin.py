@@ -6,8 +6,8 @@ import asyncio
 
 class Help(BasePlugin):
 
-    def __init__(self, slack_client):
-        super().__init__(slack_client, "Help!")
+    def __init__(self):
+        super().__init__("Help!")
 
     def get_help_message(self):
         msg = [
@@ -26,5 +26,6 @@ class Help(BasePlugin):
             yield from self.send_help_message(message.channel)
 
     @asyncio.coroutine
-    def send_help_message(self, channel_id):
-        self.sc.rtm_send_message(channel_id, self.get_help_message())
+    def send_help_message(self, channel_id):  # pragma: no cover
+        yield from self.slack.send_channel_message(channel_id,
+                                                   self.get_help_message())

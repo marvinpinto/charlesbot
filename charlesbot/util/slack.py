@@ -1,22 +1,6 @@
 import json
 import logging
-import asyncio
 log = logging.getLogger(__name__)
-
-
-@asyncio.coroutine
-def slack_rtm_api_call(slack_client, api_endpoint, **kwargs):
-    val = slack_client.api_call(api_endpoint, **kwargs)
-    json_str = json.loads(val.decode('utf-8'))
-    if not json_str['ok']:
-        log.error(
-            "Error fetching %s - response: %s",
-            api_endpoint,
-            str(json_str['ok'])
-        )
-        log.error(json_str)
-        return json.dumps("{}")
-    return json.dumps(json_str)
 
 
 def get_robot_info(auth_test):

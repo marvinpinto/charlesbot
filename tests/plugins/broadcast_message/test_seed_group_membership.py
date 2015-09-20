@@ -1,19 +1,24 @@
 import asynctest
 import json
 from asynctest.mock import patch
-from asynctest.mock import MagicMock
 
 
 class TestSeedGroupMembership(asynctest.TestCase):
 
     def setUp(self):
-        patcher = patch('charlesbot.plugins.broadcast_message.slack_rtm_api_call')  # NOQA
-        self.addCleanup(patcher.stop)
-        self.mock_slack_rtm = patcher.start()
+        patcher1 = patch('charlesbot.plugins.broadcast_message.BroadcastMessage.seed_initial_data')  # NOQA
+        self.addCleanup(patcher1.stop)
+        self.mock_seed_initial_data = patcher1.start()
+
+        patcher2 = patch('charlesbot.slack.slack_connection.SlackConnection.api_call')  # NOQA
+        self.addCleanup(patcher2.stop)
+        self.mock_api_call = patcher2.start()
+
         from charlesbot.plugins.broadcast_message import BroadcastMessage
-        self.slack_client = MagicMock()
-        self.bm = BroadcastMessage(self.slack_client)
-        self.bm.seed_initial_data = MagicMock()
+        self.bm = BroadcastMessage()
+
+    def tearDown(self):
+        self.bm.slack._drop()
 
     def test_seed_channel_membership(self):
         group_info = {
@@ -41,6 +46,6 @@ class TestSeedGroupMembership(asynctest.TestCase):
                 }
             ]
         }
-        self.mock_slack_rtm.return_value = json.dumps(group_info)
+        self.mock_api_call.side_effect = [json.dumps(group_info)]
         yield from self.bm.seed_group_membership()
         self.assertEqual(self.bm.room_membership, {'G024BE91L': 'secretplans'})

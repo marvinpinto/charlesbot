@@ -1,5 +1,4 @@
 import asyncio
-from charlesbot.util.slack import slack_rtm_api_call
 from charlesbot.util.http import http_get_auth_request
 from charlesbot.slack.slack_attachment import SlackAttachment
 import logging
@@ -60,7 +59,7 @@ def get_oncall_users(token, subdomain, schedules, since, until):
 
 
 @asyncio.coroutine
-def send_oncall_response(slack_client, schedules, channel_id):
+def send_oncall_response(slack_connection, schedules, channel_id):
     message = []
     for schedule in schedules:
         oncall_people = ", ".join(sorted(user.full_name for user in schedule.oncall_users))  # NOQA
@@ -73,8 +72,7 @@ def send_oncall_response(slack_client, schedules, channel_id):
                                  text=final_msg,
                                  mrkdwn_in=["text"])
 
-    yield from slack_rtm_api_call(
-        slack_client,
+    yield from slack_connection.api_call(
         'chat.postMessage',
         channel=channel_id,
         attachments=attachment,

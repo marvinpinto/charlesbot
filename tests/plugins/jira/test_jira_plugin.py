@@ -1,5 +1,4 @@
 import asynctest
-from asynctest.mock import MagicMock
 from asynctest.mock import patch
 from asynctest.mock import call
 from charlesbot.slack.slack_message import SlackMessage
@@ -8,8 +7,6 @@ from charlesbot.slack.slack_message import SlackMessage
 class TestJiraPlugin(asynctest.TestCase):
 
     def setUp(self):
-        self.slack_client = MagicMock()
-
         patcher1 = patch('charlesbot.plugins.jira.jira.Jira.load_config')
         self.addCleanup(patcher1.stop)
         self.mock_load_config = patcher1.start()
@@ -23,7 +20,7 @@ class TestJiraPlugin(asynctest.TestCase):
         self.mock_send_jira_issue_response = patcher3.start()
 
         from charlesbot.plugins.jira.jira import Jira
-        self.jira = Jira(self.slack_client)
+        self.jira = Jira()
         self.jira.base_url = "https://jira.atlassian.com"
         self.sm = SlackMessage()
         self.sm.channel = "#work"

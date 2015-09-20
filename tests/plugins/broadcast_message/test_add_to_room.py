@@ -1,7 +1,5 @@
 import asynctest
-from asynctest.mock import MagicMock
-from asynctest.mock import CoroutineMock
-from charlesbot.plugins.broadcast_message import BroadcastMessage
+from asynctest.mock import patch
 from charlesbot.slack.slack_group_joined import SlackGroupJoined
 from charlesbot.slack.slack_channel_joined import SlackChannelJoined
 
@@ -9,17 +7,11 @@ from charlesbot.slack.slack_channel_joined import SlackChannelJoined
 class TestAddToRoom(asynctest.TestCase):
 
     def setUp(self):
-        self.slack_client = MagicMock()
-        self.initialize_bm_plugin()
-
-    def tearDown(self):
-        self.initialize_bm_plugin()
-
-    def initialize_bm_plugin(self):
-        self.bm = BroadcastMessage(self.slack_client)
-        self.bm.seed_initial_data = MagicMock()
-        self.bm.remove_from_room = CoroutineMock()
-        self.bm.parse_wall_message = CoroutineMock()
+        patcher = patch('charlesbot.plugins.broadcast_message.BroadcastMessage.seed_initial_data')  # NOQA
+        self.addCleanup(patcher.stop)
+        self.mock_seed_initial_data = patcher.start()
+        from charlesbot.plugins.broadcast_message import BroadcastMessage
+        self.bm = BroadcastMessage()
         self.bm.room_membership = {}
 
     def test_invalid_input_single(self):

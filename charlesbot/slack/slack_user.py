@@ -1,6 +1,5 @@
 import json
 import asyncio
-from charlesbot.util.slack import slack_rtm_api_call
 from charlesbot.base_object import BaseObject
 
 
@@ -27,12 +26,9 @@ class SlackUser(BaseObject):
         super().__init__(**kwargs)
 
     @asyncio.coroutine
-    def retrieve_slack_user_info(self, slack_client, user_id):
-        result = yield from slack_rtm_api_call(
-            slack_client,
-            'users.info',
-            user=user_id
-        )
+    def retrieve_slack_user_info(self, slack_connection, user_id):
+        result = yield from slack_connection.api_call('users.info',
+                                                      user=user_id)
         self.load(json.loads(result))
 
     def load(self, user_dict):

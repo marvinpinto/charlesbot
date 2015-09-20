@@ -1,5 +1,4 @@
 from charlesbot.util.slack import (
-    slack_rtm_api_call,
     get_robot_channel_membership,
     get_robot_group_membership
 )
@@ -23,12 +22,12 @@ from charlesbot.slack.slack_message import SlackMessage
 
 class BroadcastMessage(BasePlugin):
 
-    def __init__(self, slack_client):
-        super().__init__(slack_client, "Broadcast Message")
+    def __init__(self):
+        super().__init__("Broadcast Message")
         self.room_membership = {}
         self.seed_initial_data()
 
-    def seed_initial_data(self):
+    def seed_initial_data(self):  # pragma: no cover
         loop = asyncio.get_event_loop()
         loop.create_task(self.seed_channel_membership())
         loop.create_task(self.seed_group_membership())
@@ -39,18 +38,16 @@ class BroadcastMessage(BasePlugin):
 
     @asyncio.coroutine
     def seed_channel_membership(self):
-        result = yield from slack_rtm_api_call(self.sc,
-                                               'channels.list',
-                                               exclude_archived=1)
+        result = yield from self.slack.api_call('channels.list',
+                                                exclude_archived=1)
         channels = get_robot_channel_membership(result)
         self.room_membership.update(channels)
         self.log_room_membership()
 
     @asyncio.coroutine
     def seed_group_membership(self):
-        result = yield from slack_rtm_api_call(self.sc,
-                                               'groups.list',
-                                               exclude_archived=1)
+        result = yield from self.slack.api_call('groups.list',
+                                                exclude_archived=1)
         groups = get_robot_group_membership(result)
         self.room_membership.update(groups)
         self.log_room_membership()
@@ -92,7 +89,8 @@ class BroadcastMessage(BasePlugin):
         if not parsed_message:  # pragma: no cover
             return
         slack_user = SlackUser()
-        yield from slack_user.retrieve_slack_user_info(self.sc, message.user)
+        yield from slack_user.retrieve_slack_user_info(self.slack,
+                                                       message.user)
         yield from self.send_broadcast_message(parsed_message, slack_user)
 
     @asyncio.coroutine
@@ -105,8 +103,7 @@ class BroadcastMessage(BasePlugin):
                                      text=msg)
 
         for key in self.room_membership.keys():
-            yield from slack_rtm_api_call(
-                self.sc,
+            yield from self.slack.api_call(
                 'chat.postMessage',
                 channel=key,
                 attachments=attachment,
