@@ -53,6 +53,7 @@ class SlackConnection(Borg):
     def get_message_type(self, msg):
         self.initialize()
         obj_list = [
+            "charlesbot.slack.slack_pong.SlackPong",
             "charlesbot.slack.slack_channel_joined.SlackChannelJoined",
             "charlesbot.slack.slack_channel_left.SlackChannelLeft",
             "charlesbot.slack.slack_group_joined.SlackGroupJoined",
@@ -73,6 +74,11 @@ class SlackConnection(Borg):
     def send_channel_message(self, channel_id, message):  # pragma: no cover
         self.initialize()
         self.sc.rtm_send_message(channel_id, message)
+
+    @asyncio.coroutine
+    def send_ping_message(self):  # pragma: no cover
+        self.initialize()
+        self.sc.server.ping()
 
     @asyncio.coroutine
     def api_call(self, api_endpoint, **kwargs):

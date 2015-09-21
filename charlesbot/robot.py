@@ -49,7 +49,13 @@ class Robot(object):
         return return_list
 
     def initialize_static_plugins(self):
+        self.initialize_ping_plugin()
         self.initialize_help_plugin()
+
+    def initialize_ping_plugin(self):
+        from charlesbot.plugins.ping_plugin import Ping
+        p = Ping()
+        self.plugin_list.append(p)
 
     def initialize_help_plugin(self):
         from charlesbot.plugins.help_plugin import Help
