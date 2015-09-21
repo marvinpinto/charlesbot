@@ -44,6 +44,9 @@ setup(
         "cchardet",
         "aiohttp",
         "PyYAML",
+        "aiocron",
+        "croniter",
+        "python-dateutil",
     ],
 
     test_suite='nose.collector'
