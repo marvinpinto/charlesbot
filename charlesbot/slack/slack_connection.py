@@ -43,6 +43,12 @@ class SlackConnection(Borg):
             for msg in messages:
                 message_object = self.get_message_type(msg)
                 return_messages.append(message_object)
+        except TimeoutError as t:
+            self.log.error("Error reading from slack socket: %s" % t)
+            self.log.error("--- full stack trace ---")
+            self.log.error(traceback.format_exc())
+            self.log.info("Now attempting to reconnect")
+            self.connect()
         except BrokenPipeError as b:
             self.log.critical("Error reading from slack socket: %s" % b)
             self.log.critical("--- full stack trace ---")
