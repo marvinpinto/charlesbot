@@ -7,4 +7,4 @@ croniter==0.3.8
 python-dateutil==2.4.2
 websocket-client==0.32.0
 wheel==0.24.0
-git+https://github.com/slackhq/python-slackclient.git@ba71b24603f63e54e704d0481812efcd9f7b8c14
+slackclient==0.16

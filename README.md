@@ -63,14 +63,8 @@ option for you to get going!
 ```bash
 export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.yaml
 pyvenv-3.4 charlesbot-env
-charlesbot-env/bin/pip install git+https://github.com/slackhq/python-slackclient.git@ba71b24603f63e54e704d0481812efcd9f7b8c14
 charlesbot-env/bin/pip install charlesbot
 ```
-
-The reason for installing `slackclient` straight from GitHub here is because
-the published (PyPI) version of `slackclient` does not contain the
-modifications necessary to work with Python 3.x. I'll get this updated as and
-when they publish a newer version of `slackclient`.
 
 #### Running CharlesBOT
 
