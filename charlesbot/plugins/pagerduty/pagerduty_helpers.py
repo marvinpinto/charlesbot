@@ -78,5 +78,5 @@ def send_oncall_response(slack_connection, schedules, channel_id):
         attachments=attachment,
         as_user=False,
         username="Currently On-Call",
-        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png"  # NOQA
+        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg"  # NOQA
     )
