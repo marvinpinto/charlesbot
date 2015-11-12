@@ -39,7 +39,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1],
                                       "chan1")
@@ -61,7 +61,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1],
                                       "chan1")
@@ -85,7 +85,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1],
                                       "chan1")
@@ -107,7 +107,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
@@ -131,7 +131,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
@@ -155,7 +155,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
@@ -181,7 +181,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")
@@ -209,7 +209,7 @@ class TestSendOncallResponse(asynctest.TestCase):
                         attachments=attachment,
                         as_user=False,
                         username="Currently On-Call",
-                        icon_url="https://slack.global.ssl.fastly.net/11699/img/services/pagerduty_48.png")  # NOQA
+                        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg")  # NOQA
         yield from self.send_response(self.slack_connection,
                                       [pd_sched1, pd_sched2],
                                       "chan1")

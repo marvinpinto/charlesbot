@@ -112,5 +112,5 @@ class BroadcastMessage(BasePlugin):
                 attachments=attachment,
                 as_user=False,
                 username="Broadcast Message",
-                icon_url="https://s3-us-west-2.amazonaws.com/slack-files2/bot_icons/2015-07-26/8217958308_48.png"  # NOQA
+                icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg"  # NOQA
             )
