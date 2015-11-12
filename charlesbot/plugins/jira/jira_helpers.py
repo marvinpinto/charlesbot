@@ -44,7 +44,7 @@ def send_jira_issue_response(slack_conn, channel, jira_base_url, jira_issue):
         attachments=attachment,
         as_user=False,
         username="JIRA",
-        icon_url="https://slack.global.ssl.fastly.net/12d4/img/services/jira_48.png"  # NOQA
+        icon_url="https://avatars.slack-edge.com/2015-07-31/8502215814_6662f69db3bed43d32e6_48.jpg"  # NOQA
     )
 
 
