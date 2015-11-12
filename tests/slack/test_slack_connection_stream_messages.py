@@ -1,5 +1,6 @@
 import asynctest
 from asynctest.mock import MagicMock
+from asynctest.mock import call
 
 
 class TestSlackConnectionStreamMessages(asynctest.TestCase):
@@ -9,6 +10,7 @@ class TestSlackConnectionStreamMessages(asynctest.TestCase):
         self.slack = SlackConnection()
         self.slack.initialized = True
         self.slack.sc = MagicMock()
+        self.slack.connect = MagicMock()
 
     def tearDown(self):
         self.slack._drop()
@@ -22,6 +24,11 @@ class TestSlackConnectionStreamMessages(asynctest.TestCase):
         self.slack.sc.rtm_read.side_effect = [BrokenPipeError]
         with self.assertRaises(SystemExit):
             yield from self.slack.get_stream_messages()
+
+    def test_timeout_error(self):
+        self.slack.sc.rtm_read.side_effect = [TimeoutError]
+        yield from self.slack.get_stream_messages()
+        self.assertEqual(self.slack.connect.mock_calls, [call()])
 
     def test_stream_one_message(self):
         self.slack.sc.rtm_read.return_value = ["boo"]
