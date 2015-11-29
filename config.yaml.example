@@ -3,7 +3,3 @@ main:
   enabled_plugins:
     - 'charlesbot.plugins.broadcast_message.BroadcastMessage'
     - 'charlesbot.plugins.help_plugin.Help'
-    - 'charlesbot.plugins.jira.jira.Jira'
-
-jira:
-  base_url: 'https://jira.atlassian.com'
