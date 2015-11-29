@@ -2,4 +2,3 @@ main:
   slackbot_token: 'xoxb-...'
   enabled_plugins:
     - 'charlesbot.plugins.broadcast_message.BroadcastMessage'
-    - 'charlesbot.plugins.help_plugin.Help'
