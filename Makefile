@@ -49,5 +49,8 @@ test: install
 run:
 	PYTHONWARNINGS=default PYTHONASYNCIODEBUG=1 $(ENV)/bin/charlesbot
 
+# e.g. PART=major make release
+# e.g. PART=minor make release
+# e.g. PART=patch make release
 release: guard-PART
 	$(ENV)/bin/bumpversion $(PART)
