@@ -14,14 +14,6 @@ and it'll get there eventually :)
 
 ## What does this thing even do?!
 
-Well, not very much so far. Poor robot :(
-
-#### Broadcast Message
-
-Send a `!wall` broadcast message to all channels Charles has been invited to!
-
-![wall][4]
-
 #### Get some `!help`
 
 ![help][5]
@@ -145,7 +137,6 @@ See the [LICENSE](LICENSE.txt) file for license rights and limitations (MIT).
 [1]: https://api.slack.com/rtm
 [2]: https://my.slack.com/services/new/bot
 [3]: /images/logo.png?raw=true
-[4]: /images/wall.png?raw=true
 [5]: /images/help.png?raw=true
 [6]: http://i.giphy.com/5xtDarmwsuR9sDRObyU.gif
 [7]: https://github.com/slackhq/python-slackclient
