@@ -131,6 +131,9 @@ html_theme_options = {
     'github_banner': True,
     'travis_button': True,
     'analytics_id': os.getenv('GOOGLE_ANALYTICS_ID', "no-google-analytics"),
+    'extra_nav_links': {
+        "Home Page": 'https://www.charlesbot.org',
+    }
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
