@@ -1,4 +1,5 @@
-ENV=./env
+current_dir := $(shell pwd)
+ENV=$(current_dir)/env
 
 all: help
 
@@ -19,11 +20,14 @@ guard-%:
      exit 1; \
    fi;
 
+.PHONY: clean
 clean:
 	py3clean .
 	rm -f .coverage
 	find . -name "__pycache__" -exec /bin/rm -rf {} \;
+	rm -rf docs/_build
 
+.PHONY: clean-all
 clean-all: clean
 	rm -rf env
 	rm -rf charlesbot.egg-info
@@ -31,14 +35,21 @@ clean-all: clean
 env: clean
 	test -d $(ENV) || pyvenv-3.4 $(ENV)
 
+.PHONY: install
 install: env
 	$(ENV)/bin/pip install -r requirements-dev.txt
 	$(ENV)/bin/pip install -e .
 
+.PHONY: checkstyle
 checkstyle: install
 	$(ENV)/bin/flake8 --max-complexity 10 charlesbot
 	$(ENV)/bin/flake8 --max-complexity 10 tests
 
+.PHONY: docs
+docs: install
+	make -C docs html SPHINXBUILD="$(ENV)/bin/sphinx-build" SPHINXOPTS="-W"
+
+.PHONY: test
 test: install
 	$(ENV)/bin/nosetests \
 		-v \
@@ -46,6 +57,7 @@ test: install
 		--cover-package=charlesbot \
 		tests
 
+.PHONY: run
 run:
 	PYTHONWARNINGS=default PYTHONASYNCIODEBUG=1 $(ENV)/bin/charlesbot
 

@@ -2,3 +2,4 @@ env/
 charlesbot.egg-info/
 .coverage
 development.yaml
+/docs/_build
