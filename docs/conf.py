@@ -127,8 +127,8 @@ html_theme_options = {
     'logo_text_align': 'center',
     'github_user': 'marvinpinto',
     'github_repo': 'charlesbot',
-    'github_button': True,
-    'github_banner': False,
+    'github_button': False,
+    'github_banner': True,
     'travis_button': True,
     'analytics_id': os.getenv('GOOGLE_ANALYTICS_ID', "no-google-analytics"),
 }
