@@ -25,3 +25,4 @@ out!
     installation
     development
     roadmap
+    architecture
