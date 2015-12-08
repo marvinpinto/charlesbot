@@ -38,7 +38,7 @@ deploy:
   script: 'bundle exec s3_website push --verbose'
   skip_cleanup: true
   on:
-    tags: true
+    branch: 'master'
     repo: 'marvinpinto/charlesbot'
 
 after_deploy:
