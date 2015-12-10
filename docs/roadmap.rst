@@ -17,9 +17,13 @@ The plugin architecture for this project has come a long way since the first
 few iterations. It is designed such that plugins can be dropped in place
 without having to modify the core code-base.
 
+This is what the `current architecture`__ looks like.
+
+__ architecture.html
+
 The "queue + worker" system of delivering messages to each plugin is an
-experiment in how much this design will scale, before it starts hogging CPU
-resources and just being generally slow. We'll see how it goes!
+experiment in how much this design will scale, before it starts hogging
+resources and being generally slow. We'll see how it goes!
 
 Configuration Management
 ------------------------
