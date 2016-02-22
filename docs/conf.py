@@ -132,7 +132,7 @@ html_theme_options = {
     'travis_button': True,
     'analytics_id': os.getenv('GOOGLE_ANALYTICS_ID', "no-google-analytics"),
     'extra_nav_links': {
-        "Home Page": 'https://www.charlesbot.org',
+        "Home Page": 'https://charlesbot.org',
         "GitHub": 'https://github.com/marvinpinto/charlesbot',
         "Issues": 'https://github.com/marvinpinto/charlesbot/issues',
     }
