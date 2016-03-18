@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'charlesbot'
-copyright = '2015, Marvin Pinto'
+copyright = '2016, Marvin Pinto'
 author = 'Marvin Pinto'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -122,13 +122,10 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'logo': 'images/logo.png',
-    'logo_name': True,
-    'logo_text_align': 'center',
+    'logo_name': False,
     'github_user': 'marvinpinto',
     'github_repo': 'charlesbot',
-    'github_button': False,
-    'github_banner': True,
+    'github_button': True,
     'travis_button': True,
     'analytics_id': os.getenv('GOOGLE_ANALYTICS_ID', "no-google-analytics"),
     'extra_nav_links': {
@@ -155,7 +152,7 @@ html_theme_path = [alabaster.get_path()]
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+html_favicon = '_static/images/favicon.ico'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
