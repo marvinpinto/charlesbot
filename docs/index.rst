@@ -24,5 +24,6 @@ out!
 
     installation
     development
+    plugin
     roadmap
     architecture
