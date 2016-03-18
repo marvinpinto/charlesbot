@@ -13,10 +13,25 @@ Requests`__ for submitting code patches.
 __ https://github.com/marvinpinto/charlesbot/issues
 __ https://github.com/marvinpinto/charlesbot/pulls
 
+Plugins
+-------
+
+- `Broadcast Message`__
+- Jira__
+- Pagerduty__
+- `Pagerduty Escalations`__
+- `Rundeck`__
+
+__ https://github.com/marvinpinto/charlesbot-broadcast-message
+__ https://github.com/marvinpinto/charlesbot-jira
+__ https://github.com/marvinpinto/charlesbot-pagerduty
+__ https://github.com/freshbooks/charlesbot-pagerduty-escalations
+__ https://github.com/marvinpinto/charlesbot-rundeck
+
 ----
 
-Please use the left sidebar to get started, and thank you for checking this
-out!
+Have a look through the sidebar to get started, and thank you for checking
+this out!
 
 .. toctree::
     :hidden:

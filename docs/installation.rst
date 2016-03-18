@@ -32,23 +32,13 @@ Charlesbot source tree.
 
 __ https://github.com/marvinpinto/charlesbot/blob/master/config.yaml.example
 
+
 Plugins
 -------
 
 By default, Charlesbot does not ship with any useful plugins. You will need to
 install and enable these plugins separately.
 
-Here is a noncomprehensive list of Charlesbot plugins:
-
-- `Broadcast Message`__
-- Jira__
-- Pagerduty__
-- `Pagerduty Escalations`__
-
-__ https://github.com/marvinpinto/charlesbot-broadcast-message
-__ https://github.com/marvinpinto/charlesbot-jira
-__ https://github.com/marvinpinto/charlesbot-pagerduty
-__ https://github.com/freshbooks/charlesbot-pagerduty-escalations
 
 Installation Using PyPI
 -----------------------
