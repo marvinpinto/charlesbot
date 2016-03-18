@@ -17,12 +17,15 @@ install:
   - ./env/bin/pip install coveralls
 
 script:
+  - 'make docs'
   - make checkstyle
   - make test
-  - make docs
 
 after_success:
   - ./env/bin/coveralls
+
+before_deploy:
+  - 'make docs'
 
 deploy:
 - provider: pypi
