@@ -1,14 +1,15 @@
 from setuptools import setup, find_packages
+import codecs
 
-long_description = """
-Full details available at https://github.com/marvinpinto/charlesbot
-"""
+# README into long description
+with codecs.open('README.rst', encoding='utf-8') as f:
+    readme = f.read()
 
 setup(
     name='charlesbot',
     version='0.10.0',
-    description='Slack Real Time Messaging robot written in Python 3!',
-    long_description=long_description,
+    description='CharlesBOT is a Python bot written to take advantage of Slack\'s Real Time Messaging API',
+    long_description=readme,
     author='Marvin Pinto',
     author_email='marvin@pinto.im',
     license='MIT',
