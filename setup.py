@@ -7,7 +7,7 @@ with codecs.open('README.rst', encoding='utf-8') as f:
 
 setup(
     name='charlesbot',
-    version='0.10.0',
+    version='0.10.1',
     description='CharlesBOT is a Python bot written to take advantage of Slack\'s Real Time Messaging API',
     long_description=readme,
     author='Marvin Pinto',
