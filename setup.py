@@ -40,7 +40,7 @@ setup(
     },
 
     install_requires=[
-        "slackclient",
+        "slackclient==0.16",
         "websocket-client",
         "cchardet",
         "aiohttp",
