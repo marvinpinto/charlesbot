@@ -417,8 +417,8 @@ Hacker News stories.
     +        return (yield from response.json())
     +
     +    def schedule_timer_message(self):
-    +        "Print out the top five newly submitted HN stories every 5 minutes"
-    +        timer = crontab('*/5 * * * *', func=self.send_timer_message, start=False)
+    +        "Print out the top five newly submitted HN stories every minute"
+    +        timer = crontab('* * * * *', func=self.send_timer_message, start=False)
     +        timer.start()
     +
     +    @asyncio.coroutine
