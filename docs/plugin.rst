@@ -136,6 +136,9 @@ messaging your bot user with ``!help``:
     !help - This help message
     !version - List the running CharlesBOT version
 
+The help message for ``!command`` orgininates in the ``charlesbot-helloworld``
+plugin.
+
 
 Reading Human Input
 -------------------
