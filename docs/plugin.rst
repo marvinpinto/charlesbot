@@ -136,32 +136,42 @@ messaging your bot user with ``!help``:
     !help - This help message
     !version - List the running CharlesBOT version
 
+The help message for ``!command`` orgininates in the ``charlesbot-helloworld``
+plugin.
+
 
 Reading Human Input
 -------------------
 
 A chatbot is not very useful unless it's able to read and process human input.
 So update the imports and modify the ``process_message`` function in
-``helloworld.py`` as follows:
+``charlesbot_hello_world/helloworld.py`` as follows:
 
-.. code-block:: python
+.. code-block:: diff
 
-    from charlesbot.slack.slack_message import SlackMessage
-    from charlesbot.util.parse import does_msg_contain_prefix
-    # ...
+    --- a/charlesbot_hello_world/helloworld.py
+    +++ b/charlesbot_hello_world/helloworld.py
+    @@ -1,5 +1,7 @@
+     from charlesbot.base_plugin import BasePlugin
+     from charlesbot.config import configuration
+    +from charlesbot.slack.slack_message import SlackMessage
+    +from charlesbot.util.parse import does_msg_contain_prefix
+     import asyncio
 
-    @asyncio.coroutine
-    def process_message(self, message):
-        self.log.info("Processing message %s" % message)
 
-        if not type(message) is SlackMessage:
-            return
-
-        if not does_msg_contain_prefix("!hn", message.text):
-            return
-
-        return_msg = "Hi there!"
-        yield from self.slack.send_channel_message(message.channel, return_msg)
+    @@ -21,3 +23,12 @@ class HelloWorld(BasePlugin):
+         @asyncio.coroutine
+         def process_message(self, message):
+             self.log.info("Processing message %s" % message)
+    +
+    +        if not type(message) is SlackMessage:
+    +            return
+    +
+    +        if not does_msg_contain_prefix("!hn", message.text):
+    +            return
+    +
+    +        return_msg = "Hi there!"
+    +        yield from self.slack.send_channel_message(message.channel, return_msg)
 
 What we're doing here is using the ``SlackMessage`` object and the
 ``does_msg_contain_prefix`` helper to determine if a ``!hn`` message was
@@ -183,29 +193,40 @@ the story IDs of all the trending news stories on Hacker News.
 Modify the ``process_message`` function and add the ``get_all_hn_top_stories``
 function:
 
-.. code-block:: python
+.. code-block:: diff
 
-    @asyncio.coroutine
-    def process_message(self, message):
+    --- a/charlesbot_hello_world/helloworld.py
+    +++ b/charlesbot_hello_world/helloworld.py
+    @@ -3,6 +3,7 @@ from charlesbot.config import configuration
+     from charlesbot.slack.slack_message import SlackMessage
+     from charlesbot.util.parse import does_msg_contain_prefix
+     import asyncio
+    +import aiohttp
 
-        # ...
 
-        return_msg = yield from self.get_all_hn_top_stories()
-        yield from self.slack.send_channel_message(message.channel, str(return_msg))
+     class HelloWorld(BasePlugin):
+    @@ -30,5 +31,19 @@ class HelloWorld(BasePlugin):
+             if not does_msg_contain_prefix("!hn", message.text):
+                 return
 
-    @asyncio.coroutine
-    def get_all_hn_top_stories(self):
-        hn_top_stories_url = "https://hacker-news.firebaseio.com/v0/topstories.json"
-        response = yield from aiohttp.get(hn_top_stories_url)
-        if not response.status == 200:
-            text = yield from response.text()
-            self.log.error("URL: %s" % url)
-            self.log.error("Response status code was %s" % str(response.status))
-            self.log.error(response.headers)
-            self.log.error(text)
-            response.close()
-            return []
-        return (yield from response.json())
+    -        return_msg = "Hi there!"
+    -        yield from self.slack.send_channel_message(message.channel, return_msg)
+    +        return_msg = yield from self.get_all_hn_top_stories()
+    +        yield from self.slack.send_channel_message(message.channel, str(return_msg))
+    +
+    +    @asyncio.coroutine
+    +    def get_all_hn_top_stories(self):
+    +        hn_top_stories_url = "https://hacker-news.firebaseio.com/v0/topstories.json"
+    +        response = yield from aiohttp.get(hn_top_stories_url)
+    +        if not response.status == 200:
+    +            text = yield from response.text()
+    +            self.log.error("URL: %s" % url)
+    +            self.log.error("Response status code was %s" % str(response.status))
+    +            self.log.error(response.headers)
+    +            self.log.error(text)
+    +            response.close()
+    +            return []
+    +        return (yield from response.json())
 
 As you will see from the output, that prints something along the lines of:
 
@@ -229,36 +250,43 @@ also print out the relevant details.
 Update the ``process_message`` function and add the ``print_top_n_hn_stories``
 function:
 
-.. code-block:: python
+.. code-block:: diff
 
-    @asyncio.coroutine
-    def process_message(self, message):
+    --- a/charlesbot_hello_world/helloworld.py
+    +++ b/charlesbot_hello_world/helloworld.py
+    @@ -31,7 +31,8 @@ class HelloWorld(BasePlugin):
+             if not does_msg_contain_prefix("!hn", message.text):
+                 return
 
-        # ...
+    -        return_msg = yield from self.get_all_hn_top_stories()
+    +        raw_story_ids = yield from self.get_all_hn_top_stories()
+    +        return_msg = yield from self.print_top_n_hn_stories(5, raw_story_ids)
+             yield from self.slack.send_channel_message(message.channel, str(return_msg))
 
-        raw_story_ids = yield from self.get_all_hn_top_stories()
-        return_msg = yield from self.print_top_n_hn_stories(5, raw_story_ids)
-
-        # ...
-
-    @asyncio.coroutine
-    def print_top_n_hn_stories(self, number_of_stories, raw_story_ids):
-        return_string = []
-        for story in raw_story_ids[:number_of_stories]:
-            url = "https://hacker-news.firebaseio.com/v0/item/%s.json" % story
-            self.log.info("Now processing story: %s" % url)
-            response = yield from aiohttp.get(url)
-            if not response.status == 200:
-                text = yield from response.text()
-                self.log.error("URL: %s" % url)
-                self.log.error("Response status code was %s" % str(response.status))
-                self.log.error(response.headers)
-                self.log.error(text)
-                response.close()
-                continue
-            json_story = yield from response.json()
-            return_string.append("%s (%s)" % (json_story['title'], json_story['url']))
-        return "\n".join(return_string)
+         @asyncio.coroutine
+    @@ -47,3 +48,22 @@ class HelloWorld(BasePlugin):
+                 response.close()
+                 return []
+             return (yield from response.json())
+    +
+    +    @asyncio.coroutine
+    +    def print_top_n_hn_stories(self, number_of_stories, raw_story_ids):
+    +        return_string = []
+    +        for story in raw_story_ids[:number_of_stories]:
+    +            url = "https://hacker-news.firebaseio.com/v0/item/%s.json" % story
+    +            self.log.info("Now processing story: %s" % url)
+    +            response = yield from aiohttp.get(url)
+    +            if not response.status == 200:
+    +                text = yield from response.text()
+    +                self.log.error("URL: %s" % url)
+    +                self.log.error("Response status code was %s" % str(response.status))
+    +                self.log.error(response.headers)
+    +                self.log.error(text)
+    +                response.close()
+    +                continue
+    +            json_story = yield from response.json()
+    +            return_string.append("%s (%s)" % (json_story['title'], json_story['url']))
+    +        return "\n".join(return_string)
 
 That's looking a bit better.
 
@@ -389,8 +417,8 @@ Hacker News stories.
     +        return (yield from response.json())
     +
     +    def schedule_timer_message(self):
-    +        "Print out the top five newly submitted HN stories every 5 minutes"
-    +        timer = crontab('*/5 * * * *', func=self.send_timer_message, start=False)
+    +        "Print out the top five newly submitted HN stories every minute"
+    +        timer = crontab('* * * * *', func=self.send_timer_message, start=False)
     +        timer.start()
     +
     +    @asyncio.coroutine
