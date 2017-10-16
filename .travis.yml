@@ -5,13 +5,13 @@ python:
 
 env:
   global:
-    - 'AWS_ACCESS_KEY_ID=AKIAJP3DIYUEHRAW7A6A'
-    - secure: "IOVIXR/fHCYfi5065qVo55DNuMb/u5iQMTMZn3zV2OAkMLhb5WbyNJhTSUvtdqVjqmw1ay/f36gVmgwyMb4UaLOIZfHbKHb7AYTYZ8ZVOLKFdVkGj8Nfn9XXRwzcsWpPeU2ZvZWAaaPbZKyq0rK2litOxZykJjBmQ80q/XFNbgAHpJOQSdHFSFSyGSox9KeE/uDcEftMK6R/o7FFm+tNWUgrgT0cxjX0YSaFKH/PdlnlVj6/IbUbbEHyQUaF/w1Kv48gwsPDaZ7YZfa9MyrSIksZbbIi+3xXyiXvlADrL9buLgMgIVyAYn5Z4ThKfguyKkz42ShHEAsfSMTcTcInGbjKObD8/S6G7to5yJZsSs7DIkysepToeGXx5wG7ZBn6eGwY5P3dCC6dedFrvsRaS6k0cFMM2QhUFpwFoLh5aZkNlD6BL1aBrhE4mrvypyugOXuU/dGaOLCevqEpyfW+wAO4Aq6vbFToOmPqX0VUY995Om4P7t4OBC0GQN1mZ1QQX8dojkgIVihnWaFY4eJvbWMciZnuo8Nb5CqBzfv2YJ/rCeGnrFSuM1ctdRlOywdL8CG0SuNq5bcJRXm6zpMqkqdOfcRwAtIR5PJ2RHai+ivwq7GmgxCosKuG42+bj69PrhDYAWwDxtGLtD3PnZatBXACnV/fcZH3LFKIyC7if7Y="
-    - secure: "pBVA1oGu+P9H+r15ZdKgZgWmfodPMKijQPtJsmjD3oBuB+ZUIAp/r1VJAttbSZTR63x+DNY63htFHsNCWNonFjOxSb5qFnEGWfmhy7qLUEDuPAqZHEu2eDlmAga1qlFQBwKeJrYkUm5VwYrKvyeFmDB2VqHgQZpioRr10x2NpGtokMG9YI4ONW2aryO4HJCbiMp3RVz7YXexvbf9/hqv04gGOlbEqTQCVukR0PC1xD8EHUapYAwgBskDgD/KLB7eTrTZmxYAGRRqdxMNECfiXCbiFyfkq36e2WGLrbNWdD4oGdk2TER4M1zzTQYfnHoIfaWiR8kjssFQPAW5/Sl0q7HejOBPak32dQKeoeMy4Gv0KtsXPSSCgiqxy9307FpQRpWx93syNDtmV8Ajx3PS52B8SRqyVddMa0PYQbmGYJ/OAhofdyutiTnlXMYJE8fPG7t42lExg1KYZbykSG/bGG57IpTwsHdngsgbMdLOeGkBnQ2dqNb2KPR1hHftGtPR6MN1tWdE3xPfuqTVsB89abPWkKaOdeMnpyXav818YZZ1O3oKAJAhNNeGERGTtaR8cwuNEOlaFl2gczgKGYyfqoAtXE29xOFh0ANuSipYjksTq5YWwlD7/kAa2rMcJrYxyf5XxT2BgUKeCRgU2rJ9txPckabwGsH1uaQ7LwnH0jI="
-    - 'CLOUDFRONT_DISTRIBUTION_ID=E1A827GWU5EU30'
+    - 'AWS_ACCESS_KEY_ID=AKIAJOOPEXUKZIPG6FIA'
+    # AWS_SECRET_ACCESS_KEY
+    - secure: "flncVoA8Xn4fmaHMNIFtUTKsvqkrD31QrSHmfqmyq/XpgyELyocDYcQY9VwCqWOBqsoYQMEhbvTkNWmlaBcsmzKYnpINM7e0NwXIts9EenSHcoqGj9LVApxYND0c72PndVuRgduDa4AAozFcrtks6wDEFV6tuoHgsEqcnHHDQfd2PPPJpm7RgZWEVclY4E/sue0cijvOC3hUiQkLEHgyA2J5I+3jIIIoNGTSJWBwTbcBCzOL0PDblSmAl0+Llu41C0aEawE0FvW3OAeWL+NkCqj4Lctke49rRcgfH7eyKqUrNk+PmPUPxhFkoqzNkccJRajH10Y8Yyn8CkINLw5GsYj9cMhlNFCM92ZJZ1Y6AFycKcugLWrt+jPuTXw8treOug2WrqnJ9U2mg6nqIiqTIKM7AYUJFcfgJs3pOvcroQtpPD+0LJ9RsneBcn5yBllQI0XOSUX+JJAuyDKn7RayxqMvdgRL9Bj1F4ui3TbhNGfnRvlxFC1nP3+1q8FwkKMbnTryhzovkWpT+Ixiy8lQa21byk8sCwBs0Ddj2dsBMulKkZCfLtSU1U4RsNvGQ2ahh4RBCNDg9NpkwshBnbQw56BtvOvAskNs9dqViX9cEufBtVULYEE82V/Jy1OSPLARA2IdXut7Vp2THfNbyOsVEypi6fXkPGMr3oJ/5R4kBYQ="
+    - 'GOOGLE_ANALYTICS_ID=UA-70495014-1'
+    - 'CLOUDFRONT_DISTRIBUTION_ID=E1KIBDKGZ4V1S4'
 
 install:
-  - bundle install
   - pip install -U twine
   - make install
   - ./env/bin/pip install coveralls
@@ -36,7 +36,7 @@ deploy:
     tags: true
     repo: marvinpinto/charlesbot
 - provider: 'script'
-  script: 'bundle exec s3_website push --verbose'
+  script: 'gem install s3_website && s3_website push --verbose'
   skip_cleanup: true
   on:
     branch: 'master'
@@ -44,5 +44,9 @@ deploy:
 
 notifications:
   email: false
-  irc:
-    - secure: "Y5ZXefNfyouSSCyD+A6zi9LFJz/+L0NH7W9woUo4D2/Ee2KOPE7yIhe/WaYFeigxqFusWOntDIJA5qEyCGBCOldePbtKQuKlekWehkq1i5LLfeAu5FmRQU2wVzME957KyKzC8pARcExSqVaZWW5fvUI5VVCGbrp1iJhzzsPEMZ4SfYQpahdbIFTHPkM851FqMYPSUvDducIwE40aaoabwmS0pNPgZ0DMl1cUf5gGeWSYyWtO9Hj/iS9QgCKa2XRUhQ2Dy1sShBnu3Wloc+gQJU+k7a0yKI7aDp2qGUdi3L1MDTIZZ4CQ9KEyXD8Zj3nG/X6j69EO5s7ext/La9NFroZvf6updgAtZXi/Ug01nFqviQ7MvKN/YmCVs+9tMjzB8I9DKZpHbK9RYxpHa4dvDWmdzyPtirouLLgtLyUtYuvh8AFZAF02HYeka7AJ8uCoPAO0K5QfrR1eM9Ag7tKsy29MtQ2lvAuR3zh73jA8Aqiw1bbLypSxIovijufOyz+7VHyEIGvcnlZwllGiUacdsLFog4rBws8Fm8r54VjDJkwXmzO6DDSfmOG+N5EfMV+FO7+V+dn2Xuy97bHH6/Almqq5jEBaB8niw1njR6HLLbFl99vzQErLpKSWiBE7tQ/0AtZqSxBLqWgYSi9gG3bYHLZ9+o1ijwEMrwLt0NIUysM="
+  webhooks:
+    urls:
+      - secure: "J81BEDFf5szscnfcBY7TgQ7IQfR3IEuX5xqbEso4DSW51XuzBH+MGUuYNjkS6x6yjqMS79+8QGKJAh1daxQZ2wRoht2AA7ViTBmIWqMHjjTbzMBME7qvSuLD1nppiJZ7TxvTpKIJTbMMWiY6jwF+5sOd3V8O9D/CQ7/cNQHs/Wn3V04JxS764zEfvTZuH/1Yeor+pEgXy9VcJ4gaKUhVEaStayaZDYN6rsKCWwUTMEoaGk9VlDEKubuoyMA6OwFe0u/Zg85puj83xBU1+n1yOaHkCxkMOxzMbNNAMDU2qz7Tw34Dh+wnpiYkLoaV84w27Sx+j5/yyS5o5XIM4J0bJ1hCyqjeShcFyb/EAcymvAEGgpLVgjaoTF7UqKkD30ocjFpLq3L7SdBUfo0Awfm/vlqL0OY//etMOpWZS+5MzapLDYWSxGda5LQrzakwo2h+iwefO17cvrbheyRAmTkBB9P9oUp9lv0t+PbKuevDdECvQPsPEDCUEIOnPVRM4mME3bZaN3ZSi1AnLmWnaGqPICQsg6xUVxyp1jqHdYwU1cALOMNzP73HYAORT7spCKam61j0katgCDywY/xeHFs46my9aD2ukJoRnMQWDpzY8XSCXnpjFlL3JLYNWyMSjVRM5A8wQKy5s2kWZJh2ErnIxBnkFPPWRJrNUtNl2iVPbb4="
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: never     # options: [always|never|change] default: always

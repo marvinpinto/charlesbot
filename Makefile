@@ -33,7 +33,7 @@ clean-all: clean
 	rm -rf charlesbot.egg-info
 
 env: clean
-	test -d $(ENV) || pyvenv-3.4 $(ENV)
+	test -d $(ENV) || virtualenv -p `which python3.4` $(ENV)
 
 .PHONY: install
 install: env

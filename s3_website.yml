@@ -1,11 +1,14 @@
 s3_id: "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
 s3_secret: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
-s3_bucket: "charlesbot.org"
+s3_bucket: "disjoint.ca"
+s3_key_prefix: "projects/charlesbot"
 site: "docs/_build/html"
 
-max_age: 86400
+max_age: 7200 # 2 hours
 
 cloudfront_distribution_id: "<%= ENV['CLOUDFRONT_DISTRIBUTION_ID'] %>"
 cloudfront_invalidate_root: true
 
 concurrency_level: 5
+content_type:
+  "*.html": "text/html"

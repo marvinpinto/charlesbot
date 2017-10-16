@@ -37,6 +37,8 @@ this out!
     :hidden:
     :maxdepth: 2
 
+    Home <https://disjoint.ca>
+    GitHub <https://github.com/marvinpinto/charlesbot>
     installation
     development
     plugin
