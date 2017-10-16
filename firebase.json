@@ -1,0 +1,22 @@
+{
+  "hosting": {
+    "public": "firebase",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "https://disjoint.ca/projects/charlesbot",
+        "type": 301
+      },
+      {
+        "source": "/**",
+        "destination": "https://disjoint.ca/projects/charlesbot",
+        "type": 301
+      }
+    ]
+  }
+}
