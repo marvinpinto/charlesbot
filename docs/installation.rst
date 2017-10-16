@@ -47,9 +47,7 @@ Requirements
 ^^^^^^^^^^^^
 
 - Python 3.4.3
-- pyvenv__
 
-__ https://docs.python.org/3.4/library/venv.html
 
 Base Installation
 ^^^^^^^^^^^^^^^^^
@@ -57,7 +55,7 @@ Base Installation
 .. code-block:: bash
 
     export CHARLESBOT_SETTINGS_FILE=/path/to/your/config.yaml
-    pyvenv-3.4 charlesbot-env
+    python3.4 -m venv charlesbot-env
     charlesbot-env/bin/pip install charlesbot
     # charlesbot-env/bin/pip install charlesbot-plugin-xx..
     charlesbot-env/bin/charlesbot
@@ -95,7 +93,7 @@ Sample Dockerfile
 
     # Install charlesbot
     RUN cd /src \
-      && pyvenv-3.4 env \
+      && python3.4 -m venv env \
       && env/bin/pip install charlesbot \
       # && env/bin/pip install charlesbot-plugin-xx... \
       && echo "Installation complete"

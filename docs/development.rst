@@ -5,9 +5,7 @@ Requirements
 ------------
 
 - Python 3.4.3
-- pyvenv__
 
-__ https://docs.python.org/3.4/library/venv.html
 
 Running Charlesbot locally
 --------------------------

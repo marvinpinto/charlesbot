@@ -39,12 +39,10 @@ Supplies
 Here's the basics you'll need to get started:
 
 - Python 3.4.3
-- pyvenv__
 - `Slack Bot Token`__
 - `git`__
 - `cookiecutter`__ (``pip install cookiecutter``)
 
-__ https://docs.python.org/3.4/library/venv.html
 __ https://my.slack.com/services/new/bot
 __ https://git-scm.com
 __ https://github.com/audreyr/cookiecutter
